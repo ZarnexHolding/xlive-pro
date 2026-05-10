@@ -153,7 +153,7 @@ nav.sc {
 .hero-bg-img {
   position: absolute;
   inset: 0;
-  background-image: url("../img/hero/hero-bg.jpg");
+  background-image: url("../img/hero/hero-bg.webp");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -1079,7 +1079,7 @@ section {
 .cta-bg {
   position: absolute;
   inset: 0;
-  background-image: url("../img/race/arial-race-view.jpg");
+  background-image: url("../img/race/arial-race-view.webp");
   background-size: cover;
   background-position: center;
   filter: saturate(0.8) brightness(0.25);
