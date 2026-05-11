@@ -1,0 +1,55 @@
+import {
+  electricRacing,
+  concertStage,
+  formulaECar,
+  arialRaceView,
+  neonFormula,
+} from '../assets';
+
+export const galleryItems = [
+  {
+    id: 1,
+    img: electricRacing,
+    alt: 'Formula E Speed',
+    cat: 'Formula E · 2025',
+    name: 'ELECTRIC SPEED — RIYADH ePRIX',
+    span2: true,
+    minH: '380px',
+  },
+  {
+    id: 2,
+    img: concertStage,
+    alt: 'Concert Stage',
+    cat: 'Production · xlive',
+    name: 'MEGA STAGE',
+    span2: false,
+    minH: '380px',
+  },
+  {
+    id: 3,
+    img: formulaECar,
+    alt: 'Race Cars Side by Side',
+    cat: 'Racing · Close-Up',
+    name: 'SIDE BY SIDE',
+    span2: false,
+    minH: '280px',
+  },
+  {
+    id: 4,
+    img: arialRaceView,
+    alt: 'Aerial Track View',
+    cat: 'Aerial · Circuit',
+    name: "BIRD'S VIEW",
+    span2: false,
+    minH: '280px',
+  },
+  {
+    id: 5,
+    img: neonFormula,
+    alt: 'Neon Car',
+    cat: 'Neon · Night',
+    name: 'AFTER DARK',
+    span2: false,
+    minH: '280px',
+  },
+];
