@@ -95,7 +95,7 @@ export default function Hero({ loaded = true, onHeroReady }) {
           loop
           playsInline
           poster="/poster.jpg"
-          src="/src/assets/videos/hero.mp4"
+          src="/videos/hero.mp4"
           onLoadedData={onHeroReady}
           onCanPlay={onHeroReady}
           onCanPlayThrough={onHeroReady}
