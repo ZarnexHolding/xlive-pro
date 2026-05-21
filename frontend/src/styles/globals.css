@@ -1,0 +1,195 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg: #080808;
+    --bg-secondary: #0E0E0E;
+    --bg-card: #111111;
+    --cream: #EDE8DF;
+    --cream-muted: #9A9590;
+    --accent: #E84530;
+    --accent-warm: #C8A97A;
+    --border: rgba(237, 232, 223, 0.08);
+    --border-subtle: rgba(237, 232, 223, 0.05);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: auto; /* Lenis handles this */
+    overflow-x: hidden;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: var(--cream);
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+}
+
+/* Custom cursor (inner dot + outer ring) */
+#cur, #cur-ring {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10000;
+  transform: translate(-50%, -50%);
+  will-change: left, top;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.cursor-ready #cur,
+.cursor-ready #cur-ring {
+  opacity: 1;
+  visibility: visible;
+}
+
+#cur {
+  width: 10px;
+  height: 10px;
+  background: var(--cream);
+  mix-blend-mode: difference;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#cur-ring {
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(237, 232, 223, 0.35);
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1), height 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s;
+}
+
+.hov #cur {
+  width: 5px;
+  height: 5px;
+}
+
+.hov #cur-ring {
+  width: 64px;
+  height: 64px;
+  border-color: var(--accent);
+}
+
+@layer components {
+  .section-label {
+    @apply font-body text-xs tracking-widest uppercase text-cream-muted;
+  }
+
+  .section-heading {
+    @apply font-display font-bold text-cream;
+  }
+
+  .divider {
+    @apply w-full h-px bg-border;
+  }
+
+  .accent-line {
+    @apply w-12 h-px bg-accent;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-accent text-cream font-body font-medium text-sm tracking-wide transition-all duration-300;
+  }
+
+  .btn-primary:hover {
+    @apply bg-opacity-90;
+    transform: translateY(-1px);
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center gap-2 px-6 py-3 border border-cream/20 text-cream font-body font-medium text-sm tracking-wide transition-all duration-300;
+  }
+
+  .btn-outline:hover {
+    @apply border-cream/60 bg-cream/5;
+  }
+
+  .card {
+    @apply bg-bg-card border border-border;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .writing-v {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+
+  /* Swiper overrides */
+  .swiper-pagination-bullet {
+    background: var(--cream-muted) !important;
+    opacity: 0.4 !important;
+  }
+
+  .swiper-pagination-bullet-active {
+    background: var(--accent) !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Lenis scroll smooth */
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
