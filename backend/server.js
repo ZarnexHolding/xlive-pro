@@ -7,13 +7,18 @@ dotenv.config()
 
 const app = express()
 
-app.use(cors({
-  origin: [
-    'https://xlive-pro.vercel.app',
-    'http://localhost:5173'
-  ],
-  methods: ['POST'],
-}))
+app.use(
+  cors({
+    origin: [
+      'https://www.xlive-pro.com',
+      'https://xlive-pro.com',
+      'https://xlive-pro.vercel.app',
+      'http://localhost:5173',
+    ],
+    methods: ['GET', 'POST'],
+    credentials: true,
+  })
+)
 
 app.use(express.json())
 
