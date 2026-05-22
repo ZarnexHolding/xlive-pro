@@ -7,38 +7,60 @@ dotenv.config()
 
 const app = express()
 
-app.use(cors())
+app.use(cors({
+  origin: [
+    'https://xlive-pro.vercel.app',
+    'http://localhost:5173'
+  ],
+  methods: ['POST'],
+}))
+
 app.use(express.json())
 
 const PORT = process.env.PORT || 5000
 
 // Mail transporter
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    },
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 10000,
+})
+
+transporter.verify((error, success) => {
+  if (error) {
+    console.log("SMTP ERROR:", error)
+  } else {
+    console.log("SMTP READY")
+  }
 })
 
 // Contact route
 app.post('/api/contact', async (req, res) => {
-    try {
-        const { name, email, message } = req.body
+  try {
+    const { name, email, message } = req.body
 
-        if (!name || !email || !message) {
-            return res.status(400).json({
-                success: false,
-                message: 'All fields are required',
-            })
-        }
+    if (!name || !email || !message) {
+      return res.status(400).json({
+        success: false,
+        message: 'All fields are required',
+      })
+    }
 
-        // Admin email
-        const adminMail = {
-            from: process.env.EMAIL_USER,
-            to: process.env.EMAIL_USER,
-            subject: `New Contact Submission from ${name}`,
-            html: `
+    // Admin email
+    const adminMail = {
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER,
+      subject: `New Contact Submission from ${name}`,
+      html: `
 <div style="margin:0;padding:40px 20px;background:#0a0a0a;font-family:Arial,sans-serif;color:#f5f1ea;">
 
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -116,14 +138,14 @@ app.post('/api/contact', async (req, res) => {
 
 </div>
 `,
-        }
+    }
 
-        // User confirmation email
-        const userMail = {
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: 'We Received Your Message | XLIVE',
-            html: `
+    // User confirmation email
+    const userMail = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'We Received Your Message | XLIVE',
+      html: `
 <div style="margin:0;padding:40px 20px;background:#0a0a0a;font-family:Arial,sans-serif;color:#f5f1ea;">
 
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -181,25 +203,25 @@ app.post('/api/contact', async (req, res) => {
 
 </div>
 `,
-        }
-
-        await transporter.sendMail(adminMail)
-        await transporter.sendMail(userMail)
-
-        return res.status(200).json({
-            success: true,
-            message: 'Message sent successfully',
-        })
-    } catch (error) {
-        console.error(error)
-
-        return res.status(500).json({
-            success: false,
-            message: 'Something went wrong',
-        })
     }
+
+    await transporter.sendMail(adminMail)
+    await transporter.sendMail(userMail)
+
+    return res.status(200).json({
+      success: true,
+      message: 'Message sent successfully',
+    })
+  } catch (error) {
+    console.error(error)
+
+    return res.status(500).json({
+      success: false,
+      message: 'Something went wrong',
+    })
+  }
 })
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}`)
 })
