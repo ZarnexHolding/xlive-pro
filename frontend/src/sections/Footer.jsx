@@ -66,7 +66,7 @@ export default function Footer() {
               {/* Contact */}
               <div className="space-y-4 text-sm">
                 <a
-                  href="https://mail.google.com/mail/?view=cm&fs=1&to=XLive@zar-nex.com"
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=7arnex@gmail.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 text-cream-muted hover:text-cream hover:translate-x-[2px] transition-all duration-300"
