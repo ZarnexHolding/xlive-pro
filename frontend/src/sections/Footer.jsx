@@ -75,7 +75,7 @@ export default function Footer() {
                     size={16}
                     className="text-accent flex-shrink-0"
                   />
-                  XLive@zar-nex.com
+                  7arnex@gmail.com
                 </a>
                 <a
                   href="tel:+97100000000"
