@@ -58,7 +58,7 @@ export default function Navbar() {
     >
       <nav className="shell flex items-center justify-between h-[74px]">
         <a href="#top" onClick={go('#top')} className="flex items-center gap-3" aria-label="XLIVE Production — home">
-          <img src={logo} alt="XLIVE Production" className="h-7 w-auto" />
+          <img src={logo} alt="XLIVE Production" className="h-10 w-auto" />
         </a>
 
         <div className="hidden lg:flex items-center gap-8">
