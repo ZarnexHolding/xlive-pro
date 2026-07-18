@@ -1,0 +1,161 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * XLIVE global styles. Tokens mirror tailwind.config.js (single source of
+ * truth); the CSS variables below expose them to canvas/SVG/inline gradients.
+ */
+@layer base {
+  :root {
+    --ink-950: #050609;
+    --ink-900: #080A11;
+    --ink-800: #0C0E17;
+    --ink-700: #11141F;
+    --ink-600: #171A28;
+
+    --electric: #2A1AAE;
+    --electric-bright: #3A28E0;
+    --electric-glow: #5138FF;
+    --acid: #73F83E;
+    --vivid: #089A23;
+    --olive: #6E7B63;
+
+    --fg: #F3F5FB;
+    --fg-muted: #9BA1B6;
+    --fg-dim: #5B6178;
+
+    --line: rgba(243, 245, 251, 0.10);
+    --line-soft: rgba(243, 245, 251, 0.06);
+    --line-strong: rgba(243, 245, 251, 0.18);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: auto; /* Lenis handles smooth scroll */
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--ink-900);
+    color: var(--fg);
+    font-family: 'Hanken Grotesk', 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Helvetica Neue', Helvetica, 'Archivo', Arial, sans-serif;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background-color: var(--acid);
+    color: var(--ink-950);
+  }
+
+  img, video { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+  :focus-visible {
+    outline: 2px solid var(--acid);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ---- Reusable brand components ---- */
+@layer components {
+  .shell {
+    @apply w-full max-w-shell mx-auto px-gutter;
+  }
+
+  /* Eyebrow / section label with an acid tick */
+  .eyebrow {
+    @apply inline-flex items-center gap-3 font-body text-label uppercase text-fg-muted;
+  }
+  .eyebrow::before {
+    content: '';
+    @apply inline-block w-6 h-px bg-acid;
+  }
+
+  .section-heading {
+    @apply font-display font-bold text-fg;
+  }
+
+  .divider { @apply w-full h-px bg-line; }
+
+  /* Primary CTA — acid green, high-voltage, used sparingly */
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden
+           px-7 py-3.5 rounded-xs bg-acid text-ink-950 font-body font-semibold
+           text-sm tracking-wide transition-transform duration-300 ease-expo;
+  }
+  .btn-primary:hover { transform: translateY(-2px); }
+
+  /* Secondary — engineered outline */
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xs
+           border border-line-strong text-fg font-body font-medium text-sm
+           tracking-wide transition-colors duration-300 ease-luxury;
+  }
+  .btn-outline:hover { @apply border-fg bg-white/5; }
+
+  .card {
+    @apply bg-ink-700 border border-line rounded-md;
+  }
+}
+
+/* ---- Utilities ---- */
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
+  .writing-v { writing-mode: vertical-rl; text-orientation: mixed; }
+
+  /* Digital grid layout background (brand graphic element) */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, var(--line-soft) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--line-soft) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+
+  /* Electric-blue radial ambience */
+  .bg-glow-blue {
+    background: radial-gradient(60% 60% at 50% 0%, rgba(58,40,224,0.22) 0%, transparent 70%);
+  }
+
+  .clip-none { clip-path: none; }
+}
+
+/* ---- Swiper overrides ---- */
+.swiper-pagination-bullet { background: var(--fg-dim) !important; opacity: 0.5 !important; }
+.swiper-pagination-bullet-active { background: var(--acid) !important; opacity: 1 !important; }
+
+/* ---- Lenis ---- */
+html.lenis { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+.lenis.lenis-scrolling iframe { pointer-events: none; }
