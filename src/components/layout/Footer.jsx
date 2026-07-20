@@ -44,6 +44,7 @@ export default function Footer() {
           <div className="md:col-span-4">
             <p className="font-body text-label uppercase text-fg-dim mb-5">Riyadh, KSA</p>
             <address className="not-italic font-body text-sm text-fg-muted leading-relaxed">
+              {company.parent}<br />
               {company.address.line1}<br />
               {company.address.line2}<br />
               {company.address.city}, {company.address.country}

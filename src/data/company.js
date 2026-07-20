@@ -12,8 +12,8 @@ export const company = {
   phone: '+966 53 430 7007',
   phoneHref: 'tel:+966534307007',
   address: {
-    line1: 'Abdul Aziz Bin Sabil Street',
-    line2: 'Al Farooq District 6485',
+    line1: 'Building no.7436, 7th floor, Salah El Din El Ayouby Street',
+    line2: 'District Al-malaz, 12629',
     city: 'Riyadh',
     country: 'Saudi Arabia',
   },
