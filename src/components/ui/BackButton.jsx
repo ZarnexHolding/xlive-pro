@@ -8,8 +8,7 @@ import { HiArrowLeft } from 'react-icons/hi2'
 export default function BackButton({ label = 'Back', className = '' }) {
   const navigate = useNavigate()
   const goBack = () => {
-    if (window.history.length > 1) navigate(-1)
-    else navigate('/')
+    navigate('/')
   }
   return (
     <button

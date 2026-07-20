@@ -22,7 +22,9 @@ There is **no test or lint script** configured (package.json has only dev/build/
 
 ## Tech stack
 
-React 19 + Vite 5 · Tailwind CSS 3 · Framer Motion 12 (all animation) · Lenis (smooth scroll) · react-router-dom 7 · react-helmet-async (SEO) · react-icons · Resend (contact email, serverless only). Deploys to **Vercel** (project root = this `frontend/` folder).
+React 19 + Vite 5 · Tailwind CSS 3 · Framer Motion 12 (all animation) · Lenis (smooth scroll) · react-router-dom 7 · react-helmet-async (SEO) · react-icons · Resend (contact email, serverless only). Deploys to **Vercel**.
+
+The Vite app lives at the **repository root** — `src/`, `public/`, `api/`, `index.html`, `vite.config.js`, `package.json`, `vercel.json` are all at the top level (the app was flattened up from an earlier `frontend/` subfolder, so ignore any lingering `frontend/…` path references).
 
 ## Architecture
 
@@ -47,6 +49,7 @@ React 19 + Vite 5 · Tailwind CSS 3 · Framer Motion 12 (all animation) · Lenis
 
 - **Button variants**: never override a variant's color by appending a `className` (Tailwind precedence is source-order, not class-order — this once produced a black-on-black button). Add a new variant in `components/ui/Button.jsx` instead (e.g. `dark`).
 - **Nav items** (`company.js` `nav`): items use **`href`** for in-page anchors (Home sections) or **`to`** for routes. `Navbar` and `Footer` branch on which is present; anchor clicks from a non-home route navigate home first, then scroll (via Lenis `getLenis()`).
+- **Featured Work grid** (`components/sections/Work.jsx`): its `LAYOUT` array drives an asymmetric 6-card grid (`[7|5] [5|7] [7|5]`) and is sized to the number of `projects`. If you add/remove a project in `data/projects.js`, update `LAYOUT` to keep the rows balanced (it falls back to the last entry so it won't crash). The `/work` index page (`pages/Work.jsx`) has its own `SIZES` array.
 - **Images**: optimized JPGs in `public/images/` (real project photos extracted from source decks). Hero background is `public/videos/hero-bg.mp4` (compressed ~1 MB) with `hero-poster.jpg`.
 - **SEO**: per-route `<Seo>` (react-helmet-async) sets title/description/canonical/OG/Twitter. `index.html` holds only site-wide bits (Organization JSON-LD, `og:site_name`) — do **not** re-add per-page meta there (causes duplicates). `public/robots.txt` + `public/sitemap.xml` list all routes.
 
@@ -55,5 +58,6 @@ React 19 + Vite 5 · Tailwind CSS 3 · Framer Motion 12 (all animation) · Lenis
 `api/contact.js` is a **Vercel Serverless Function** (`POST /api/contact`) using **Resend**. It validates input, drops bots via a `website` honeypot field, sends an admin notification (Reply-To = sender) + a best-effort sender confirmation, with brand-styled HTML emails. The form (`components/sections/Contact.jsx`) posts to it same-origin (no CORS).
 
 - Env vars (set in Vercel → Settings → Environment Variables; documented in `.env.example`): `RESEND_API_KEY`, `CONTACT_TO` (inbox for enquiries), `CONTACT_FROM` (verified sender, e.g. `XLIVE Production <hello@xlive-pro.com>`).
+- **Env-var quoting gotcha**: in the **Vercel dashboard** the value box is literal — do **not** wrap values in quotes. A quoted `CONTACT_FROM` (`"XLIVE … <…>"`) becomes an invalid sender and Resend rejects the send with a **502**. Quotes belong only in a `.env` *file*. Editing env vars requires a **redeploy** to take effect.
 - **The function does not run under `npm run dev`** — use `npx vercel dev` (with a local `.env`) or test on a Vercel deployment.
 - `vercel.json` rewrites all non-`/api` routes to `index.html` (SPA deep-link support).

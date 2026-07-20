@@ -112,6 +112,32 @@ export const projects = [
     gallery: [],
   },
   {
+    slug: 'katusha-exhibition',
+    title: 'Katusha',
+    client: 'Katusha',
+    year: '2025',
+    location: 'KSA',
+    category: 'Exhibition',
+    image: '/images/katusha-stand.jpg',
+    tags: ['Exhibition stand', 'Design & fabrication', 'Branding & signage'],
+    summary:
+      'A premium exhibition stand for Katusha, designed and fabricated in-house, with bespoke structures, illuminated product vitrines and full branding and signage systems.',
+    featured: true,
+    challenge:
+      'A flagship show-floor presence for Katusha and its co-brands (Rosatom, AYA) that had to read as premium and secure, and stand apart on a crowded exhibition floor.',
+    solution:
+      'A fully bespoke, engineered stand: an illuminated branded gantry, glass product vitrines with brass detailing, integrated screens and clean lit counters, built and installed to exhibition standard.',
+    execution:
+      'Exhibition stand design, bespoke fabricated structures, product display systems, LED lighting, and branding and signage systems.',
+    scale: [
+      { v: 'Custom', l: 'Bespoke stand build' },
+      { v: 'Multi-brand', l: 'Katusha · Rosatom · AYA' },
+      { v: '2025', l: 'Delivery' },
+    ],
+    services: ['Stand design', 'Bespoke fabrication', 'Product displays', 'Branding & signage', 'LED lighting'],
+    gallery: ['/images/katusha-aisle.jpg', '/images/katusha-render.jpg'],
+  },
+  {
     slug: 'fortinet-corporate-event',
     title: 'Fortinet Corporate Event',
     client: 'Fortinet Inc.',
