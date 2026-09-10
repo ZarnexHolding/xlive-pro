@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { HiArrowRight } from 'react-icons/hi2'
 import { company } from '../../data/company'
@@ -7,17 +7,29 @@ import { Reveal } from '../animations/Reveal'
 const PROJECT_TYPES = ['Event production', 'Exhibition / stand', 'Fabrication', 'Agency partnership', 'Other']
 const field = 'w-full bg-ink-800 border border-line rounded-xs px-4 py-3 font-body text-sm text-fg placeholder:text-fg-dim focus:border-acid focus:outline-none transition-colors'
 
+const EMPTY = { name: '', company: '', email: '', phone: '', type: PROJECT_TYPES[0], message: '', whatsappOptIn: false, website: '' }
+const PHONE_RE = /^\+?[1-9]\d{6,14}$/
+
+// One id per submission attempt — lets the backend dedupe accidental double-sends.
+const newSubmissionId = () =>
+  (globalThis.crypto?.randomUUID?.() || `sub-${Date.now()}-${Math.random().toString(36).slice(2)}`)
+
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', company: '', email: '', type: PROJECT_TYPES[0], message: '', website: '' })
+  const [form, setForm] = useState(EMPTY)
   const [status, setStatus] = useState('idle') // idle | sending | error | success
   const [errors, setErrors] = useState({})
+  const submissionId = useRef(newSubmissionId())
 
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }))
+  const setChecked = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.checked }))
 
   const validate = () => {
     const err = {}
     if (!form.name.trim()) err.name = 'Required'
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) err.email = 'Valid email required'
+    const phone = form.phone.replace(/[^\d+]/g, '')
+    if (!form.phone.trim()) err.phone = 'Required'
+    else if (!PHONE_RE.test(phone)) err.phone = 'Include country code, e.g. +9715XXXXXXXX'
     if (!form.message.trim()) err.message = 'Tell us a little about the project'
     setErrors(err)
     return Object.keys(err).length === 0
@@ -25,15 +37,41 @@ export default function Contact() {
 
   const onSubmit = async (e) => {
     e.preventDefault()
+    if (status === 'sending') return
     if (!validate()) return
     setStatus('sending')
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          name: form.name,
+          company: form.company,
+          email: form.email,
+          phone: form.phone,
+          projectType: form.type,
+          project: form.message,
+          whatsappOptIn: form.whatsappOptIn,
+          website: form.website, // honeypot
+          submissionId: submissionId.current,
+        }),
       })
-      if (!res.ok) throw new Error('Request failed')
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        if (res.status === 400 && data.errors) {
+          // Map server field names back to the form's field names.
+          setErrors({
+            name: data.errors.name,
+            email: data.errors.email,
+            phone: data.errors.phone,
+            type: data.errors.projectType,
+            message: data.errors.project,
+          })
+          setStatus('error')
+          return
+        }
+        throw new Error('Request failed')
+      }
       setStatus('success')
     } catch {
       setStatus('error')
@@ -103,16 +141,24 @@ export default function Contact() {
                   <input id="company" className={field} value={form.company} onChange={set('company')} placeholder="Optional" />
                 </div>
               </div>
-              <div className="mt-4">
-                <label htmlFor="email" className="block font-body text-xs text-fg-dim mb-2">Email</label>
-                <input id="email" type="email" className={field} value={form.email} onChange={set('email')} placeholder="you@company.com" />
-                {errors.email && <p className="mt-1.5 text-xs text-acid">{errors.email}</p>}
+              <div className="grid sm:grid-cols-2 gap-4 mt-4">
+                <div>
+                  <label htmlFor="email" className="block font-body text-xs text-fg-dim mb-2">Email</label>
+                  <input id="email" type="email" className={field} value={form.email} onChange={set('email')} placeholder="you@company.com" />
+                  {errors.email && <p className="mt-1.5 text-xs text-acid">{errors.email}</p>}
+                </div>
+                <div>
+                  <label htmlFor="phone" className="block font-body text-xs text-fg-dim mb-2">Phone / WhatsApp</label>
+                  <input id="phone" type="tel" inputMode="tel" autoComplete="tel" className={field} value={form.phone} onChange={set('phone')} placeholder="+971 5X XXX XXXX" />
+                  {errors.phone && <p className="mt-1.5 text-xs text-acid">{errors.phone}</p>}
+                </div>
               </div>
               <div className="mt-4">
                 <label htmlFor="type" className="block font-body text-xs text-fg-dim mb-2">Project type</label>
                 <select id="type" className={field} value={form.type} onChange={set('type')}>
                   {PROJECT_TYPES.map((t) => <option key={t} value={t} className="bg-ink-800">{t}</option>)}
                 </select>
+                {errors.type && <p className="mt-1.5 text-xs text-acid">{errors.type}</p>}
               </div>
               <div className="mt-4">
                 <label htmlFor="message" className="block font-body text-xs text-fg-dim mb-2">Project</label>
@@ -120,7 +166,22 @@ export default function Contact() {
                 {errors.message && <p className="mt-1.5 text-xs text-acid">{errors.message}</p>}
               </div>
 
-              {status === 'error' && (
+              {/* WhatsApp consent — sits with the phone field, native styling */}
+              <label htmlFor="whatsappOptIn" className="mt-4 flex items-start gap-3 cursor-pointer select-none">
+                <input
+                  id="whatsappOptIn" type="checkbox"
+                  checked={form.whatsappOptIn} onChange={setChecked('whatsappOptIn')}
+                  className="mt-0.5 h-4 w-4 shrink-0 accent-acid bg-ink-800 border border-line rounded-xs cursor-pointer"
+                />
+                <span className="font-body text-xs leading-relaxed text-fg-muted">
+                  Yes, you can contact me on WhatsApp regarding this enquiry.
+                </span>
+              </label>
+              <p className="mt-2.5 font-body text-[11px] leading-relaxed text-fg-dim max-w-[54ch]">
+                We use your details only to respond to this enquiry. We&rsquo;ll never share them, and you can opt out of WhatsApp contact any time.
+              </p>
+
+              {status === 'error' && !Object.keys(errors).length && (
                 <p className="mt-4 text-sm text-acid">Something went wrong, please email hello@{company.domain}.</p>
               )}
 
