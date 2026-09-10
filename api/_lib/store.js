@@ -113,16 +113,18 @@ function neonStore(config, logger) {
   }
 
   async function setNotificationStatus(leadId, channel, status, error) {
-    const col = CHANNELS[channel]
-    const errCol = CHANNEL_ERR[channel]
-    if (!col) return
+    if (!CHANNELS[channel]) return
     const db = await connect()
     const errText = error ? String(error).slice(0, 500) : null
-    // Column names are from our own whitelist, never user input.
-    await db.query(
-      `UPDATE enquiries SET ${col} = $1, ${errCol} = $2 WHERE lead_id = $3`,
-      [status, errText, leadId],
-    )
+    // Tagged templates per channel — this Neon HTTP driver has no sql.query(),
+    // and column names can't be parameterised anyway.
+    if (channel === 'email') {
+      await db`UPDATE enquiries SET email_status = ${status}, email_error = ${errText} WHERE lead_id = ${leadId}`
+    } else if (channel === 'teamWa') {
+      await db`UPDATE enquiries SET team_wa_status = ${status}, team_wa_error = ${errText} WHERE lead_id = ${leadId}`
+    } else if (channel === 'customerWa') {
+      await db`UPDATE enquiries SET customer_wa_status = ${status}, customer_wa_error = ${errText} WHERE lead_id = ${leadId}`
+    }
   }
 
   async function countRecentByIp(ip, minutes) {
