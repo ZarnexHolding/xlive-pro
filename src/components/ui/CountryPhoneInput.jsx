@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { HiChevronDown, HiMagnifyingGlass } from 'react-icons/hi2'
-import { countries, flagOf } from '../../data/countries'
+import { countries } from '../../data/countries'
+import Flag from './Flag'
 
 /*
  * Phone field with a searchable country-code picker. No external dependency —
@@ -75,7 +76,7 @@ export default function CountryPhoneInput({
           aria-label={`Country code: ${country.n} +${country.d}`}
           className="flex items-center gap-1.5 pl-4 pr-3 py-3 font-body text-sm text-fg border-r border-line hover:text-acid transition-colors shrink-0"
         >
-          <span className="text-base leading-none">{flagOf(country.c)}</span>
+          <Flag code={country.c} />
           <span className="tabular-nums">+{country.d}</span>
           <HiChevronDown className={`text-fg-dim transition-transform ${open ? 'rotate-180' : ''}`} size={14} />
         </button>
@@ -121,7 +122,7 @@ export default function CountryPhoneInput({
                       selected ? 'text-acid' : 'text-fg-muted'
                     }`}
                   >
-                    <span className="text-base leading-none shrink-0">{flagOf(c.c)}</span>
+                    <Flag code={c.c} />
                     <span className="flex-1 truncate">{c.n}</span>
                     <span className="text-fg-dim tabular-nums">+{c.d}</span>
                   </button>
