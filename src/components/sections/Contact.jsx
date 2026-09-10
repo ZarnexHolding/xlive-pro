@@ -2,13 +2,18 @@ import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { HiArrowRight } from 'react-icons/hi2'
 import { company } from '../../data/company'
+import { DEFAULT_COUNTRY } from '../../data/countries'
+import CountryPhoneInput from '../ui/CountryPhoneInput'
 import { Reveal } from '../animations/Reveal'
 
 const PROJECT_TYPES = ['Event production', 'Exhibition / stand', 'Fabrication', 'Agency partnership', 'Other']
 const field = 'w-full bg-ink-800 border border-line rounded-xs px-4 py-3 font-body text-sm text-fg placeholder:text-fg-dim focus:border-acid focus:outline-none transition-colors'
 
 const EMPTY = { name: '', company: '', email: '', phone: '', type: PROJECT_TYPES[0], message: '', whatsappOptIn: false, website: '' }
-const PHONE_RE = /^\+?[1-9]\d{6,14}$/
+const PHONE_RE = /^\+[1-9]\d{6,14}$/
+
+// Compose the full E.164 number from the selected country + national digits.
+const fullPhone = (country, national) => `+${country.d}${national.replace(/[^\d]/g, '')}`
 
 // One id per submission attempt — lets the backend dedupe accidental double-sends.
 const newSubmissionId = () =>
@@ -16,6 +21,7 @@ const newSubmissionId = () =>
 
 export default function Contact() {
   const [form, setForm] = useState(EMPTY)
+  const [country, setCountry] = useState(DEFAULT_COUNTRY)
   const [status, setStatus] = useState('idle') // idle | sending | error | success
   const [errors, setErrors] = useState({})
   const submissionId = useRef(newSubmissionId())
@@ -27,9 +33,9 @@ export default function Contact() {
     const err = {}
     if (!form.name.trim()) err.name = 'Required'
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) err.email = 'Valid email required'
-    const phone = form.phone.replace(/[^\d+]/g, '')
-    if (!form.phone.trim()) err.phone = 'Required'
-    else if (!PHONE_RE.test(phone)) err.phone = 'Include country code, e.g. +9715XXXXXXXX'
+    const national = form.phone.replace(/[^\d]/g, '')
+    if (!national) err.phone = 'Required'
+    else if (!PHONE_RE.test(fullPhone(country, national))) err.phone = 'Enter a valid phone number'
     if (!form.message.trim()) err.message = 'Tell us a little about the project'
     setErrors(err)
     return Object.keys(err).length === 0
@@ -48,7 +54,7 @@ export default function Contact() {
           name: form.name,
           company: form.company,
           email: form.email,
-          phone: form.phone,
+          phone: fullPhone(country, form.phone),
           projectType: form.type,
           project: form.message,
           whatsappOptIn: form.whatsappOptIn,
@@ -149,7 +155,14 @@ export default function Contact() {
                 </div>
                 <div>
                   <label htmlFor="phone" className="block font-body text-xs text-fg-dim mb-2">Phone / WhatsApp</label>
-                  <input id="phone" type="tel" inputMode="tel" autoComplete="tel" className={field} value={form.phone} onChange={set('phone')} placeholder="+971 5X XXX XXXX" />
+                  <CountryPhoneInput
+                    id="phone"
+                    country={country}
+                    number={form.phone}
+                    onCountryChange={setCountry}
+                    onNumberChange={(v) => setForm((f) => ({ ...f, phone: v }))}
+                    invalid={Boolean(errors.phone)}
+                  />
                   {errors.phone && <p className="mt-1.5 text-xs text-acid">{errors.phone}</p>}
                 </div>
               </div>
