@@ -5,6 +5,34 @@
     <link rel="icon" type="image/png" href="/xlive-logo.webp" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#050609" />
+    <!-- Preloader gate: runs before first paint. Shown once per visit (sessionStorage);
+         repeat loads in the same tab skip it so the static HTML paints instantly. -->
+    <script>
+      (function () {
+        var h = document.documentElement
+        try { h.classList.add(sessionStorage.getItem('xlive-loaded') ? 'no-preloader' : 'is-loading') }
+        catch (e) { h.classList.add('is-loading') }
+      })()
+    </script>
+    <style>
+      html.is-loading { overflow: hidden; }
+      html.no-preloader #preloader { display: none; }
+      #preloader {
+        position: fixed; inset: 0; z-index: 9999; background: #050609; color: #F3F5FB;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+        font-family: 'Hanken Grotesk', 'Helvetica Neue', Arial, sans-serif;
+        transition: transform .8s cubic-bezier(.76, 0, .24, 1), visibility 0s linear .8s; will-change: transform;
+      }
+      #preloader.is-done { transform: translateY(-100%); visibility: hidden; }
+      #preloader svg { width: 56px; height: 52px; fill: #F3F5FB; }
+      #preloader .pl-bar { width: min(220px, 50vw); height: 1px; background: rgba(243, 245, 251, .12); overflow: hidden; }
+      #preloader .pl-fill { height: 100%; width: 100%; background: #73F83E; transform: scaleX(0); transform-origin: left; }
+      #preloader .pl-num { font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 12px; letter-spacing: .18em; color: #767D95; font-variant-numeric: tabular-nums; }
+      @media (prefers-reduced-motion: reduce) {
+        #preloader { transition: opacity .3s, visibility 0s linear .3s; }
+        #preloader.is-done { transform: none; opacity: 0; }
+      }
+    </style>
     <meta name="keywords" content="event production company Saudi Arabia, event production Riyadh, exhibition contractor KSA, event execution partner Saudi, AV production Saudi Arabia" />
     <meta property="og:site_name" content="XLIVE Production" />
 
@@ -53,12 +81,74 @@
         rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=Hanken+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
       />
+      <style>#preloader { display: none; } html.is-loading { overflow: auto; }</style>
     </noscript>
     <!-- Safety net: if the app never hydrates, reveal the hero copy anyway. -->
     <script>setTimeout(function () { document.documentElement.classList.remove('pre-hydrate') }, 4000)</script>
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Loading screen: lives outside #root so the prerender keeps it. Tracks real
+         loading (fonts, hero poster, window load, hydration), eases a 0-100 counter,
+         wipes away and fires `xlive:loaded` so the hero entrance starts on the reveal. -->
+    <div id="preloader" role="status" aria-live="polite" aria-label="Loading XLIVE Production">
+      <svg viewBox="0 0 120 110" aria-hidden="true"><path d="M6 16 L44 51 L17 96 L35 96 L58 60 L92 96 L114 96 L71 49 L106 12 L86 12 L60 40 L26 16 Z" /></svg>
+      <div class="pl-bar"><div class="pl-fill" id="pl-fill"></div></div>
+      <div class="pl-num"><span id="pl-num">00</span> / 100</div>
+    </div>
+    <script>
+      (function () {
+        var html = document.documentElement
+        if (!html.classList.contains('is-loading')) return
+        var el = document.getElementById('preloader')
+        var num = document.getElementById('pl-num')
+        var fill = document.getElementById('pl-fill')
+        var start = performance.now()
+        var MIN = 900     // never flash: show for at least this long
+        var CAP = 6000    // never trap: force completion after this long
+        var parts = { fonts: 0, poster: 0, load: 0, hydrated: 0 }
+        var weights = { fonts: 20, poster: 35, load: 30, hydrated: 15 }
+        var target = 0, shown = 0, done = false
+
+        function recompute () { var t = 0; for (var k in parts) t += parts[k] * weights[k]; target = Math.min(100, t) }
+        function mark (k) { parts[k] = 1; recompute() }
+
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { mark('fonts') })
+        else mark('fonts')
+        var img = new Image()
+        img.onload = img.onerror = function () { mark('poster') }
+        img.src = '/images/hero-poster.webp'
+        if (document.readyState === 'complete') mark('load')
+        else window.addEventListener('load', function () { mark('load') }, { once: true })
+        window.addEventListener('xlive:hydrated', function () { mark('hydrated') }, { once: true })
+        setTimeout(function () { for (var k in parts) parts[k] = 1; recompute() }, CAP)
+
+        function finish () {
+          if (done) return
+          done = true
+          try { sessionStorage.setItem('xlive-loaded', '1') } catch (e) {}
+          el.classList.add('is-done')
+          html.classList.remove('is-loading')
+          html.classList.add('is-loaded')
+          window.dispatchEvent(new Event('xlive:loaded'))
+          setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el) }, 1000)
+        }
+        function tick () {
+          // The counter eases toward what has really loaded and only reaches 100 when everything has.
+          var goal = target < 100 ? Math.min(target, 96) : 100
+          shown += (goal - shown) * 0.08
+          if (goal - shown < 0.4) shown = goal
+          var n = Math.floor(shown)
+          num.textContent = (n < 10 ? '0' : '') + n
+          fill.style.transform = 'scaleX(' + (shown / 100) + ')'
+          if (shown >= 100 && performance.now() - start >= MIN) finish()
+          else requestAnimationFrame(tick)
+        }
+        requestAnimationFrame(tick)
+      })()
+    </script>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

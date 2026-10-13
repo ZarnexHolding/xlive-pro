@@ -46,10 +46,20 @@ export default function Hero() {
       /* ---- Entrance, all devices (targets: inner elements only) ---- */
       mm.add(MOTION_OK, () => {
         const words = copy.current.querySelectorAll('.split-word')
-        gsap.timeline({ defaults: { ease: 'expo.out' } })
+        const entrance = gsap.timeline({ defaults: { ease: 'expo.out' }, paused: true })
           .fromTo(drift.current, { scale: 1.12, autoAlpha: 0.4 }, { scale: 1, autoAlpha: 1, duration: 1.8, ease: 'power3.out' }, 0)
           .fromTo(words, { yPercent: 115 }, { yPercent: 0, duration: 1.2, stagger: 0.06 }, 0.35)
           .fromTo('[data-hero-cta]', { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 1, stagger: 0.08 }, 1.05)
+
+        // First visit: hold the entrance until the loading screen (index.html)
+        // wipes away, so the reveal lands on a visible page. Otherwise play now.
+        if (!document.documentElement.classList.contains('is-loading')) {
+          entrance.play()
+          return
+        }
+        const onLoaded = () => entrance.play()
+        window.addEventListener('xlive:loaded', onLoaded, { once: true })
+        return () => window.removeEventListener('xlive:loaded', onLoaded)
       })
 
       /* ---- Scroll settle + ticker + pointer depth: desktop only ---- */

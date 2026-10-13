@@ -29,6 +29,8 @@ function SiteLayout() {
   // layout effect has set its start state, so the hand-off is seamless.
   useEffect(() => {
     document.documentElement.classList.remove('pre-hydrate')
+    // Tell the loading screen (index.html) that the app is interactive.
+    window.dispatchEvent(new Event('xlive:hydrated'))
   }, [])
   return (
     <div className="min-h-screen bg-ink-900 text-fg antialiased">
