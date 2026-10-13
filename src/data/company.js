@@ -1,4 +1,4 @@
-// Real XLIVE company data — sourced from the Business Profile, Projects deck &
+// Real XLIVE company data: sourced from the Business Profile, Projects deck &
 // Brand Guidelines. No invented figures.
 
 export const company = {

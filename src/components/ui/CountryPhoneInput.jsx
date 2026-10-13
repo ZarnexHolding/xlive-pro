@@ -4,7 +4,7 @@ import { countries } from '../../data/countries'
 import Flag from './Flag'
 
 /*
- * Phone field with a searchable country-code picker. No external dependency —
+ * Phone field with a searchable country-code picker. No external dependency -
  * a native-styled combobox that matches the site's dark form controls.
  *
  * Controlled: `country` (a {n,c,d} object) + `number` (national digits string),

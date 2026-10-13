@@ -1,5 +1,5 @@
 /*
- * WhatsApp notification service — the ONLY place that talks to WhatsApp.
+ * WhatsApp notification service: the ONLY place that talks to WhatsApp.
  *
  * Official Meta WhatsApp Business Cloud API only (graph.facebook.com). No web
  * automation, no unofficial libraries, no QR/session hacks.
@@ -10,7 +10,7 @@
  *
  * Adapter selection (see pickAdapter): the MOCK adapter is used whenever we are
  * in test mode, WHATSAPP_MOCK=true, or credentials are absent. It logs what it
- * *would* send and reports status 'sent' with mock:true — so the whole pipeline
+ * *would* send and reports status 'sent' with mock:true: so the whole pipeline
  * is testable end-to-end without a Meta account and without messaging anyone.
  * The LIVE adapter is used only in live mode WITH credentials present.
  *
@@ -23,7 +23,7 @@ function graphUrl(config) {
 
 // A plain text message (allowed to the team inside a 24h service window, or to
 // anyone who has messaged the business recently). Business-initiated messages
-// to cold numbers require a template instead — see buildTemplate.
+// to cold numbers require a template instead: see buildTemplate.
 function buildText(to, body) {
   return { messaging_product: 'whatsapp', to, type: 'text', text: { preview_url: false, body } }
 }

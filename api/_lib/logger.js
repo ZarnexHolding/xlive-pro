@@ -1,6 +1,6 @@
 /*
  * Structured, redacting logger. Portable across Node (Vercel) and Workers
- * (Cloudflare) — console.* only. Never logs secrets or full message bodies.
+ * (Cloudflare): console.* only. Never logs secrets or full message bodies.
  */
 
 const SECRET_KEYS = /token|secret|key|authorization|apikey|password/i

@@ -1,10 +1,10 @@
 /*
- * Email notification service (Resend). Runtime-agnostic — the Resend SDK is
+ * Email notification service (Resend). Runtime-agnostic: the Resend SDK is
  * fetch-based and runs on Vercel and Cloudflare alike. All callers get a
  * { ok, error } result; this module never throws.
  *
  * Two messages per enquiry:
- *   - admin notification to CONTACT_TO (the company Gmail)  — the important one
+ *   - admin notification to CONTACT_TO (the company Gmail): the important one
  *   - a best-effort confirmation to the visitor
  */
 
@@ -60,7 +60,7 @@ function userHtml(e) {
       <p style="margin:0 0 10px;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#5B6178;">Your enquiry</p>
       <p style="margin:0;font-size:15px;line-height:1.7;color:#D8DBE6;white-space:pre-wrap;">${esc(e.project)}</p>
     </div>
-    <p style="margin:0;font-size:14px;color:#5B6178;">— The XLIVE team</p>`)
+    <p style="margin:0;font-size:14px;color:#5B6178;">The XLIVE team</p>`)
 }
 
 // The email subject uses the visitor's name; validate.js has already stripped
@@ -71,7 +71,7 @@ function adminText(e) {
     '',
     `Lead ID: ${e.leadId}`,
     `Name: ${e.name}`,
-    `Company: ${e.company || '—'}`,
+    `Company: ${e.company || '-'}`,
     `Email: ${e.email}`,
     `Phone / WhatsApp: ${e.phone}`,
     `Project Type: ${e.projectType}`,
@@ -90,7 +90,7 @@ export function createEmailService(config, logger) {
     return new Resend(config.resend.apiKey)
   }
 
-  // Admin notification — treated as the critical channel.
+  // Admin notification: treated as the critical channel.
   async function sendAdminNotification(enquiry) {
     if (!config.flags.email) return { ok: true, status: 'skipped' }
     if (!config.resend.apiKey) return { ok: false, status: 'failed', error: 'RESEND_API_KEY missing' }
@@ -101,7 +101,7 @@ export function createEmailService(config, logger) {
         from: config.resend.from,
         to: config.resend.to,
         replyTo: enquiry.email,
-        subject: `New enquiry ${enquiry.leadId} — ${enquiry.name} · ${enquiry.projectType}`,
+        subject: `New enquiry ${enquiry.leadId}: ${enquiry.name} · ${enquiry.projectType}`,
         html: adminHtml(enquiry),
         text: adminText(enquiry),
       })
@@ -112,7 +112,7 @@ export function createEmailService(config, logger) {
     }
   }
 
-  // Visitor confirmation — best-effort.
+  // Visitor confirmation: best-effort.
   async function sendUserConfirmation(enquiry) {
     if (!config.flags.email) return { ok: true, status: 'skipped' }
     if (!config.resend.apiKey) return { ok: false, status: 'failed', error: 'RESEND_API_KEY missing' }

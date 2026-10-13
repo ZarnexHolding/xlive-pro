@@ -1,5 +1,4 @@
 import { useState, useRef } from 'react'
-import { motion } from 'framer-motion'
 import { HiArrowRight } from 'react-icons/hi2'
 import { company } from '../../data/company'
 import { DEFAULT_COUNTRY } from '../../data/countries'
@@ -15,7 +14,7 @@ const PHONE_RE = /^\+[1-9]\d{6,14}$/
 // Compose the full E.164 number from the selected country + national digits.
 const fullPhone = (country, national) => `+${country.d}${national.replace(/[^\d]/g, '')}`
 
-// One id per submission attempt — lets the backend dedupe accidental double-sends.
+// One id per submission attempt: lets the backend dedupe accidental double-sends.
 const newSubmissionId = () =>
   (globalThis.crypto?.randomUUID?.() || `sub-${Date.now()}-${Math.random().toString(36).slice(2)}`)
 
@@ -88,23 +87,23 @@ export default function Contact() {
     <section id="contact" className="relative bg-ink-950 py-section border-t border-line-soft overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(60%_60%_at_15%_10%,rgba(42,26,174,0.2),transparent_60%)]" />
       <div className="shell relative grid lg:grid-cols-12 gap-x-gutter gap-y-14">
-        {/* Left — invitation + direct details */}
+        {/* Left: invitation + direct details */}
         <div className="lg:col-span-5">
           <Reveal><p className="eyebrow mb-8">Start a project</p></Reveal>
           <Reveal delay={0.05}>
-            <h2 className="font-display font-black uppercase tracking-tightest text-display-lg text-balance">
+            <h2 className="font-display font-black font-wide uppercase tracking-tightest text-display-lg text-balance">
               Let&rsquo;s build something the region remembers.
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
             <div className="mt-10 space-y-6">
               <div>
-                <p className="font-mono text-xs uppercase tracking-widest text-fg-dim mb-2">Direct</p>
+                <p className="index mb-2">Direct</p>
                 <a href={company.phoneHref} className="block font-display font-bold text-xl hover:text-acid transition-colors">{company.phone}</a>
                 <a href={`mailto:hello@${company.domain}`} className="block font-body text-fg-muted hover:text-acid transition-colors">hello@{company.domain}</a>
               </div>
               <div>
-                <p className="font-mono text-xs uppercase tracking-widest text-fg-dim mb-2">Studio</p>
+                <p className="index mb-2">Studio</p>
                 <address className="not-italic font-body text-sm text-fg-muted leading-relaxed">
                   {company.address.line1}<br />{company.address.line2}<br />{company.address.city}, {company.address.country}
                 </address>
@@ -113,13 +112,10 @@ export default function Contact() {
           </Reveal>
         </div>
 
-        {/* Right — form */}
+        {/* Right: form */}
         <div className="lg:col-span-7">
           {status === 'success' ? (
-            <motion.div
-              initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-              className="card p-10 h-full flex flex-col justify-center"
-            >
+            <div className="card p-10 h-full flex flex-col justify-center animate-fade-up">
               <div className="h-12 w-12 rounded-full bg-acid/15 text-acid grid place-items-center mb-6">
                 <HiArrowRight className="rotate-[-45deg]" size={22} />
               </div>
@@ -127,10 +123,10 @@ export default function Contact() {
               <p className="mt-3 font-body text-fg-muted max-w-[42ch]">
                 We&rsquo;ll be in touch shortly. For anything urgent, call {company.phone}.
               </p>
-            </motion.div>
+            </div>
           ) : (
             <form onSubmit={onSubmit} noValidate className="card p-6 md:p-8">
-              {/* honeypot — hidden from users, catches bots */}
+              {/* honeypot: hidden from users, catches bots */}
               <input
                 type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true"
                 value={form.website} onChange={set('website')}
@@ -179,7 +175,7 @@ export default function Contact() {
                 {errors.message && <p className="mt-1.5 text-xs text-acid">{errors.message}</p>}
               </div>
 
-              {/* WhatsApp consent — sits with the phone field, native styling */}
+              {/* WhatsApp consent: sits with the phone field, native styling */}
               <label htmlFor="whatsappOptIn" className="mt-4 flex items-start gap-3 cursor-pointer select-none">
                 <input
                   id="whatsappOptIn" type="checkbox"
@@ -190,7 +186,7 @@ export default function Contact() {
                   Yes, you can contact me on WhatsApp regarding this enquiry.
                 </span>
               </label>
-              <p className="mt-2.5 font-body text-[11px] leading-relaxed text-fg-dim max-w-[54ch]">
+              <p className="mt-2.5 font-body text-xs leading-relaxed text-fg-dim max-w-[54ch]">
                 We use your details only to respond to this enquiry. We&rsquo;ll never share them, and you can opt out of WhatsApp contact any time.
               </p>
 

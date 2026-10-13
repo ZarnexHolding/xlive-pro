@@ -1,6 +1,6 @@
 /*
  * Self-hosted SVG country flag. Renders /flags/<iso2>.svg (copied from the
- * flag-icons set into public/flags). Consistent on every OS — unlike emoji
+ * flag-icons set into public/flags). Consistent on every OS: unlike emoji
  * flags, which Windows can't display. The subtle ring keeps white/light flags
  * visible on the dark UI.
  */

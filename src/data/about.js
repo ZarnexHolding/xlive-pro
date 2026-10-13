@@ -1,4 +1,4 @@
-// XLIVE organisation — role-based structure from the Business Profile org chart
+// XLIVE organisation: role-based structure from the Business Profile org chart
 // (roles/remits, not individuals). Communicates the "one roof" depth.
 
 export const divisions = [

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="pre-hydrate">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/xlive-logo.webp" />
@@ -8,8 +8,7 @@
     <meta name="keywords" content="event production company Saudi Arabia, event production Riyadh, exhibition contractor KSA, event execution partner Saudi, AV production Saudi Arabia" />
     <meta property="og:site_name" content="XLIVE Production" />
 
-    <!-- Per-route title / description / canonical / OG / Twitter are managed by the Seo component (react-helmet-async). -->
-    <title>XLIVE Production - Event Production & Technologies · Saudi Arabia</title>
+    <!-- Per-route <title> / description / canonical / OG / Twitter come from the Seo component (React 19 head tags), prerendered per route at build time. -->
 
     <script type="application/ld+json">
       {
@@ -19,7 +18,7 @@
         "alternateName": "XLIVE",
         "url": "https://xlive-pro.com",
         "logo": "https://xlive-pro.com/xlive-logo.webp",
-        "description": "Saudi Arabia's fully integrated event production and experience engineering company — live events, exhibitions, branding, fabrication and immersive experiences.",
+        "description": "Saudi Arabia's fully integrated event production and experience engineering company: live events, exhibitions, branding, fabrication and immersive experiences.",
         "telephone": "+966534307007",
         "parentOrganization": { "@type": "Organization", "name": "Zarnex Holding Company" },
         "address": {
@@ -32,12 +31,31 @@
       }
     </script>
 
+    <!-- LCP: the hero poster paints first; the video streams in afterwards. -->
+    <link rel="preload" as="image" href="/images/hero-poster.webp" type="image/webp" fetchpriority="high" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Fonts load without blocking first paint (swap in when ready). -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=Hanken+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
     />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=Hanken+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=Hanken+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      />
+    </noscript>
+    <!-- Safety net: if the app never hydrates, reveal the hero copy anyway. -->
+    <script>setTimeout(function () { document.documentElement.classList.remove('pre-hydrate') }, 4000)</script>
   </head>
   <body>
     <div id="root"></div>

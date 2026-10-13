@@ -1,5 +1,5 @@
 /*
- * XLIVE blade-"X" symbol mark — scalable SVG for icons, accents and motifs.
+ * XLIVE blade-"X" symbol mark: scalable SVG for icons, accents and motifs.
  * `currentColor` so it inherits text color; pass className for sizing/color.
  */
 export default function XSymbol({ className = 'w-8 h-8', title }) {

@@ -1,10 +1,10 @@
 /*
- * /api/webhooks/whatsapp — Meta WhatsApp webhook FOUNDATION.
+ * /api/webhooks/whatsapp: Meta WhatsApp webhook FOUNDATION.
  *
  *   GET  → verification handshake (hub.challenge)
  *   POST → receive inbound messages / delivery statuses, log + store, ACK 200
  *
- * Deliberately does NOT auto-reply — two-way conversation is a future phase.
+ * Deliberately does NOT auto-reply: two-way conversation is a future phase.
  * When credentials aren't configured yet this still answers correctly so the
  * endpoint can be registered in Meta as soon as you have a verify token.
  *

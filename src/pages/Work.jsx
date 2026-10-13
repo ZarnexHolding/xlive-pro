@@ -1,7 +1,6 @@
-import { motion } from 'framer-motion'
 import Seo from '../components/Seo'
 import { projects } from '../data/projects'
-import { Reveal } from '../components/animations/Reveal'
+import { Reveal, RevealGroup, RevealItem } from '../components/animations/Reveal'
 import ProjectCard from '../components/ui/ProjectCard'
 import BackButton from '../components/ui/BackButton'
 import Contact from '../components/sections/Contact'
@@ -22,7 +21,7 @@ export default function Work() {
           <Reveal><BackButton className="mb-10" /></Reveal>
           <Reveal><p className="eyebrow mb-8">Selected work</p></Reveal>
           <Reveal delay={0.05}>
-            <h1 className="font-display font-black uppercase tracking-tightest text-display-xl max-w-[16ch]">
+            <h1 className="font-display font-black font-wide uppercase tracking-tightest text-display-xl max-w-[16ch]">
               Proof, at full scale.
             </h1>
           </Reveal>
@@ -36,18 +35,17 @@ export default function Work() {
       </section>
 
       <section className="bg-ink-900 pb-section">
-        <div className="shell grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+        <RevealGroup className="shell grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5" stagger={0.08} y={36}>
           {projects.map((p, i) => (
-            <motion.div
-              key={p.slug}
-              initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.7, delay: (i % 2) * 0.08, ease: [0.16, 1, 0.3, 1] }}
-              className={SIZES[i] === 'lg' ? 'md:col-span-2' : ''}
-            >
-              <ProjectCard project={p} size={SIZES[i] === 'lg' ? 'wide' : 'md'} />
-            </motion.div>
+            <RevealItem key={p.slug} className={SIZES[i] === 'lg' ? 'md:col-span-2' : ''}>
+              <ProjectCard
+                project={p}
+                size={SIZES[i] === 'lg' ? 'wide' : 'md'}
+                sizes={SIZES[i] === 'lg' ? '(min-width:1440px) 1376px, 100vw' : '(min-width:768px) 50vw, 100vw'}
+              />
+            </RevealItem>
           ))}
-        </div>
+        </RevealGroup>
       </section>
 
       <Contact />

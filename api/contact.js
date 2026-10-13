@@ -1,10 +1,10 @@
 /*
- * POST /api/contact — Vercel Serverless Function.
+ * POST /api/contact: Vercel Serverless Function.
  *
  * Thin adapter only: read env → build config → hand the request to the
  * runtime-agnostic core (api/_lib/enquiry.js). To run this on Cloudflare later,
  * add a Pages Function that reads `env`, builds the same config, and calls the
- * same processEnquiry() — no core changes. See docs/ENQUIRY-SYSTEM.md.
+ * same processEnquiry(): no core changes. See docs/ENQUIRY-SYSTEM.md.
  */
 
 import { buildConfig } from './_lib/config.js'

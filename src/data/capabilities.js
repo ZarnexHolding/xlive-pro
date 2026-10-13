@@ -1,22 +1,22 @@
-// Six core-expertise pillars — verbatim from the XLIVE Business Profile.
+// Six core-expertise pillars, from the XLIVE Business Profile.
 export const capabilities = [
   {
     id: 'technical',
     title: 'Technical Production',
-    summary: 'Stage, light, sound and spectacle — the systems that make a moment land.',
+    summary: 'Stage, light, sound and spectacle. The systems that make a moment land.',
     items: [
       'Stage design & fabrication',
       'Lighting design & programming',
       'Professional audio & sound systems',
       'LED screens & media facades',
       'Projection mapping & immersive visuals',
-      'Special effects — pyrotechnics, CO₂, confetti, lasers',
+      'Special effects: pyrotechnics, CO₂, confetti, lasers',
     ],
   },
   {
     id: 'build',
     title: 'Event Build & Fabrication',
-    summary: 'From branding systems to custom scenic builds — engineered and installed.',
+    summary: 'From branding systems to custom scenic builds, engineered and installed.',
     items: [
       'Branding & signage systems',
       'Custom structures & scenic elements',
@@ -40,7 +40,7 @@ export const capabilities = [
   {
     id: 'operations',
     title: 'Event Operations & Management',
-    summary: 'End-to-end delivery — logistics, vendors, safety and on-ground command.',
+    summary: 'End-to-end delivery: logistics, vendors, safety and on-ground command.',
     items: [
       'End-to-end project management',
       'Production scheduling & logistics',
@@ -52,7 +52,7 @@ export const capabilities = [
   {
     id: 'digital',
     title: 'Digital & Immersive Experiences',
-    summary: 'Virtual, hybrid and interactive — experiences beyond the physical stage.',
+    summary: 'Virtual, hybrid and interactive. Experiences beyond the physical stage.',
     items: [
       'Virtual & hybrid events',
       'AR / VR activations',

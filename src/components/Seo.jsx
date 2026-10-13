@@ -1,15 +1,17 @@
-import { Helmet } from 'react-helmet-async'
-
 const BASE = 'https://xlive-pro.com'
 
 /*
  * Per-route SEO: title, description, canonical + Open Graph / Twitter.
- * Site-wide Organization/LocalBusiness JSON-LD lives in index.html.
+ * React 19 hoists <title>/<meta>/<link> rendered here into <head> (and swaps
+ * them on route change), so no helmet library is needed. At build time the
+ * prerender step (scripts/prerender.mjs) writes them into each route's static
+ * HTML, so crawlers get them without running JavaScript.
+ * Site-wide Organization JSON-LD lives in index.html.
  */
 export default function Seo({ title, description, path = '/', image = '/images/hero-poster.jpg' }) {
   const url = BASE + path
   return (
-    <Helmet>
+    <>
       <title>{title}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />
@@ -22,6 +24,6 @@ export default function Seo({ title, description, path = '/', image = '/images/h
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={BASE + image} />
-    </Helmet>
+    </>
   )
 }

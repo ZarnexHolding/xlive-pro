@@ -1,50 +1,59 @@
-import { useInView } from '../../hooks/useInView'
-import { useCounter } from '../../hooks/useCounter'
-import { metrics, clients } from '../../data/company'
+import { useRef } from 'react'
+import { gsap, useGSAP, MOTION_OK } from '../../lib/gsap'
+import { metrics } from '../../data/company'
 
-function Metric({ value, suffix, label, sub, start }) {
-  const count = useCounter(value, 1600, start)
-  return (
-    <div className="px-2">
-      <div className="font-display font-black tracking-tightest leading-none text-[clamp(2.75rem,5vw,4.5rem)]">
-        {count}
-        <span className="text-acid">{suffix}</span>
-      </div>
-      <div className="mt-3 font-body text-sm text-fg">{label}</div>
-      {sub && <div className="mt-1 font-body text-xs text-fg-dim uppercase tracking-wider">{sub}</div>}
-    </div>
-  )
-}
-
+/*
+ * Proof band: three source-backed numbers, counted up once on entry.
+ * The rights-holder ticker lives in the hero exit now, so this band stays a
+ * single quiet row that fits under the settled hero screen.
+ */
 export default function ProofBand() {
-  const [ref, inView] = useInView({ threshold: 0.3 })
-  const row = [...clients, ...clients]
+  const ref = useRef(null)
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia()
+      mm.add(MOTION_OK, () => {
+        const nums = ref.current.querySelectorAll('[data-count]')
+        nums.forEach((el) => {
+          const target = Number(el.dataset.count)
+          const obj = { v: 0 }
+          gsap.to(obj, {
+            v: target,
+            duration: 1.6,
+            ease: 'power3.out',
+            snap: { v: 1 },
+            onUpdate: () => (el.textContent = String(Math.round(obj.v))),
+            scrollTrigger: { trigger: ref.current, start: 'top 80%', once: true },
+          })
+        })
+        gsap.fromTo(
+          ref.current.querySelectorAll('[data-metric]'),
+          { autoAlpha: 0, y: 24 },
+          { autoAlpha: 1, y: 0, duration: 1, stagger: 0.1, scrollTrigger: { trigger: ref.current, start: 'top 85%', once: true } },
+        )
+      })
+      return () => mm.revert()
+    },
+    { scope: ref },
+  )
 
   return (
-    <section className="relative bg-ink-900 border-y border-line-soft">
-      {/* Metrics */}
-      <div ref={ref} className="shell py-[clamp(3rem,6vw,5rem)]">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12 divide-line lg:divide-x">
-          {metrics.map((m) => (
-            <div key={m.label} className="lg:pl-8 first:pl-0">
-              <Metric {...m} start={inView} />
+    <section ref={ref} className="relative bg-ink-950 border-y border-line-soft">
+      <div className="shell py-[clamp(2.5rem,5vw,4rem)]">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-6 gap-y-10 sm:divide-x divide-line-soft">
+          {metrics.slice(0, 3).map((m, i) => (
+            <div key={m.label} data-metric className={`flex items-start gap-5 ${i ? 'sm:pl-8' : ''}`}>
+              <span className="index pt-2">{String(i + 1).padStart(2, '0')}</span>
+              <div>
+                <div className="font-display font-black font-wide tracking-tightest leading-none text-[clamp(2.75rem,5vw,4.5rem)] tabular-nums">
+                  <span data-count={m.value}>0</span>
+                  <span className="text-acid">{m.suffix}</span>
+                </div>
+                <div className="mt-3 font-body text-sm text-fg">{m.label}</div>
+                {m.sub && <div className="mt-1 index">{m.sub}</div>}
+              </div>
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Client marquee */}
-      <div className="relative border-t border-line-soft py-8 overflow-hidden">
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-24 z-10 bg-gradient-to-r from-ink-900 to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-24 z-10 bg-gradient-to-l from-ink-900 to-transparent" />
-        <div className="flex w-max animate-marquee items-center gap-14 will-change-transform">
-          {row.map((c, i) => (
-            <span
-              key={c.id + i}
-              className="font-display font-semibold text-lg text-fg-dim hover:text-fg transition-colors whitespace-nowrap uppercase tracking-wide"
-            >
-              {c.name}
-            </span>
           ))}
         </div>
       </div>

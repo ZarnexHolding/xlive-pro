@@ -1,12 +1,12 @@
 /*
  * Server-side validation + sanitization for enquiries. Runtime-agnostic (pure).
- * Mirrors the client checks in Contact.jsx but is the authoritative gate — never
+ * Mirrors the client checks in Contact.jsx but is the authoritative gate: never
  * trust the browser.
  */
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-// International phone, E.164-ish. Optional leading +, then 7–15 digits. We
+// International phone, E.164-ish. Optional leading +, then 7-15 digits. We
 // normalise separators first, so "+971 55 123 4567" and "(971) 55-123-4567"
 // both pass. No country is hard-coded.
 const PHONE_RE = /^\+?[1-9]\d{6,14}$/
@@ -19,7 +19,7 @@ const PROJECT_TYPES = [
   'Other',
 ]
 
-// All control chars incl. CR/LF — stripping these blocks header/email injection.
+// All control chars incl. CR/LF: stripping these blocks header/email injection.
 const CONTROL_ALL = /[\x00-\x1F\x7F]/g
 // Same, but keep \n (\x0A) so multi-line messages survive.
 const CONTROL_NO_LF = /[\x00-\x09\x0B-\x1F\x7F]/g
@@ -52,7 +52,7 @@ function normalisePhone(value) {
 export function validateEnquiry(body = {}, { maxMessage = 5000 } = {}) {
   const errors = {}
 
-  // Honeypot — a filled `website` field means a bot. Signalled separately so the
+  // Honeypot: a filled `website` field means a bot. Signalled separately so the
   // caller can return a silent 200.
   const isBot = Boolean(String(body.website || '').trim())
 

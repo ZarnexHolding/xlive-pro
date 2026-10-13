@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
  * Renders <a> for hrefs, <Link> for `to`, <button> otherwise.
  */
 const base =
-  'inline-flex items-center justify-center gap-2 rounded-xs font-body font-semibold text-sm tracking-wide transition-all duration-300 ease-expo select-none'
+  'inline-flex items-center justify-center gap-2 rounded-full font-body font-semibold text-sm tracking-wide transition-all duration-300 ease-expo select-none'
 
 const sizes = {
   md: 'px-7 py-3.5',

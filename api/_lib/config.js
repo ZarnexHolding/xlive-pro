@@ -1,5 +1,5 @@
 /*
- * Runtime configuration — the single place env vars are read.
+ * Runtime configuration: the single place env vars are read.
  *
  * DEPLOYMENT-AGNOSTIC: nothing else under api/_lib touches process.env. Handlers
  * call buildConfig() and pass the result into the core. On Vercel that means
@@ -25,7 +25,7 @@ const list = (v) =>
     .filter(Boolean)
 
 export function buildConfig(env = {}) {
-  // Default mode is "test" — real WhatsApp is never sent until explicitly set live.
+  // Default mode is "test": real WhatsApp is never sent until explicitly set live.
   const mode = String(env.NOTIFICATIONS_MODE || 'test').toLowerCase() === 'live' ? 'live' : 'test'
 
   const whatsapp = {

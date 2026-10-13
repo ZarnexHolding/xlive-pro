@@ -7,7 +7,7 @@ export const projects = [
     slug: 'saudi-arabian-grand-prix',
     title: 'Saudi Arabian Grand Prix',
     client: 'Saudi Motorsport Co.',
-    year: '2023 — 2025',
+    year: '2023-2025',
     location: 'Jeddah, KSA',
     category: 'Motorsport',
     image: '/images/sagp-dusk-circuit.jpg',
@@ -22,7 +22,7 @@ export const projects = [
     execution:
       'Full venue branding, grandstand fascia & risers, permanent indoor and outdoor wayfinding, high facade branding, tent branding, temporary structures and chainlink fence mesh installed and dismantled to the race calendar, three years running.',
     scale: [
-      { v: '3×', l: 'Consecutive editions · 2023–2025' },
+      { v: '3×', l: 'Consecutive editions · 2023-2025' },
       { v: 'Full', l: 'Venue brand environment' },
       { v: 'Q1', l: 'Delivery window, every year' },
     ],

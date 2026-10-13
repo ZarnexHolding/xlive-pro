@@ -1,5 +1,5 @@
 /*
- * Core enquiry pipeline — runtime-agnostic. Handlers (Vercel today, Cloudflare
+ * Core enquiry pipeline: runtime-agnostic. Handlers (Vercel today, Cloudflare
  * later) do nothing but: parse the request → call processEnquiry(input, ctx) →
  * translate the result into an HTTP response.
  *
@@ -14,7 +14,7 @@
  *
  * The customer waits for the whole thing today (a few fast HTTP calls). The
  * pipeline is structured so notifications can move to a queue / waitUntil later
- * without touching validation or persistence — see docs/ENQUIRY-SYSTEM.md.
+ * without touching validation or persistence: see docs/ENQUIRY-SYSTEM.md.
  */
 
 import { validateEnquiry } from './validate.js'
@@ -70,7 +70,7 @@ export async function processEnquiry(input, { config, logger, ip, userAgent }) {
   const year = new Date().getFullYear()
   const receivedAt = receivedAtUtc()
 
-  // Allocate ID + persist. If persistence fails we DON'T drop the enquiry — we
+  // Allocate ID + persist. If persistence fails we DON'T drop the enquiry: we
   // fall back to a transient id and still fire email so it reaches Gmail.
   let leadId
   let persisted = false
@@ -97,7 +97,7 @@ export async function processEnquiry(input, { config, logger, ip, userAgent }) {
     notifications.email = r.status
     if (persisted) await safeSetStatus(store, leadId, 'email', r.status, r.error, logger)
     logger[r.ok ? 'info' : 'error']('enquiry.email', { leadId, status: r.status, error: r.error })
-    // Visitor confirmation — best effort, not status-critical.
+    // Visitor confirmation: best effort, not status-critical.
     email.sendUserConfirmation(enquiry).catch(() => {})
   }
 

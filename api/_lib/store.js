@@ -1,5 +1,5 @@
 /*
- * Persistence layer — the SOURCE OF TRUTH for enquiries.
+ * Persistence layer: the SOURCE OF TRUTH for enquiries.
  *
  * createStore(config, logger) returns one of two drivers:
  *   - neonStore   when config.db.url is set (Neon serverless Postgres)
@@ -108,7 +108,7 @@ function neonStore(config, logger) {
       ON CONFLICT (submission_id) DO NOTHING
       RETURNING *`
     if (rows[0]) return rows[0]
-    // Lost the idempotency race — return the row that won.
+    // Lost the idempotency race: return the row that won.
     return findBySubmissionId(rec.submissionId)
   }
 
@@ -116,7 +116,7 @@ function neonStore(config, logger) {
     if (!CHANNELS[channel]) return
     const db = await connect()
     const errText = error ? String(error).slice(0, 500) : null
-    // Tagged templates per channel — this Neon HTTP driver has no sql.query(),
+    // Tagged templates per channel: this Neon HTTP driver has no sql.query(),
     // and column names can't be parameterised anyway.
     if (channel === 'email') {
       await db`UPDATE enquiries SET email_status = ${status}, email_error = ${errText} WHERE lead_id = ${leadId}`
@@ -170,7 +170,7 @@ function neonStore(config, logger) {
 
 // Module-level so a warm serverless instance keeps state across requests
 // (enables best-effort idempotency + rate-limit without a database). State is
-// still lost on cold start — persistence needs Neon.
+// still lost on cold start: persistence needs Neon.
 const memRows = []
 const memCounters = {}
 
@@ -183,7 +183,7 @@ function memoryStore(config, logger) {
     if (warned) return
     warned = true
     logger?.warn('store.memory_fallback', {
-      note: 'DATABASE_URL not set — enquiries are NOT durably persisted. Set Neon to enable persistence.',
+      note: 'DATABASE_URL not set: enquiries are NOT durably persisted. Set Neon to enable persistence.',
     })
   }
 

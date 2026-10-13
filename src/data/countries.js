@@ -1,6 +1,6 @@
 // Country dial codes for the contact form's phone field. `c` = ISO-3166 alpha-2
 // (used to render a flag emoji), `d` = E.164 country calling code, `n` = name.
-// Broad list — never assume a single country. Saudi Arabia is the default.
+// Broad list: never assume a single country. Saudi Arabia is the default.
 
 export const countries = [
   { n: 'Saudi Arabia', c: 'SA', d: '966' },
@@ -124,7 +124,7 @@ export const countries = [
 ]
 
 // ISO alpha-2 → flag emoji (regional indicator symbols). Windows lacks flag
-// glyphs and will show the two letters instead — still informative.
+// glyphs and will show the two letters instead: still informative.
 export const flagOf = (iso2) =>
   iso2
     .toUpperCase()

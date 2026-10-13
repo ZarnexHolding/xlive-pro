@@ -1,11 +1,11 @@
 import { lazy, Suspense, useEffect } from 'react'
 import { Routes, Route, Outlet, useLocation } from 'react-router-dom'
-import { useLenis, getLenis } from './hooks/useLenis'
+import { useLenis, scrollToTarget } from './hooks/useLenis'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import Home from './pages/Home'
 
-// Route-level code splitting — each secondary page is its own chunk.
+// Route-level code splitting: each secondary page is its own chunk.
 const Work = lazy(() => import('./pages/Work'))
 const CaseStudy = lazy(() => import('./pages/CaseStudy'))
 const Partners = lazy(() => import('./pages/Partners'))
@@ -17,15 +17,19 @@ const Fallback = () => <div className="min-h-screen bg-ink-900" />
 function ScrollToTop() {
   const { pathname } = useLocation()
   useEffect(() => {
-    const lenis = getLenis()
-    if (lenis) lenis.scrollTo(0, { immediate: true })
-    else window.scrollTo(0, 0)
+    scrollToTarget(null, { immediate: true })
   }, [pathname])
   return null
 }
 
 function SiteLayout() {
   useLenis()
+  // Prerendered HTML keeps intro-animated hero copy hidden (html.pre-hydrate)
+  // until GSAP has taken over; by the time this effect runs every child's
+  // layout effect has set its start state, so the hand-off is seamless.
+  useEffect(() => {
+    document.documentElement.classList.remove('pre-hydrate')
+  }, [])
   return (
     <div className="min-h-screen bg-ink-900 text-fg antialiased">
       <ScrollToTop />

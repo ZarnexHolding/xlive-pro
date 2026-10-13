@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 /*
- * XLIVE Design System — living style guide.
+ * XLIVE Design System: living style guide.
  * Phase 2 deliverable: validates the brand-true tokens (color, type, motion,
  * components) render correctly before pages are built. Not a production route.
  */
@@ -65,7 +65,7 @@ export default function StyleGuide() {
       </header>
 
       {/* Color */}
-      <Block id="color" kicker="01 — Palette" title="Color system">
+      <Block id="color" kicker="01 · Palette" title="Color system">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {SWATCHES.map((s) => (
             <div key={s.name} className={`card overflow-hidden`}>
@@ -82,7 +82,7 @@ export default function StyleGuide() {
       </Block>
 
       {/* Type */}
-      <Block id="type" kicker="02 — Typography" title="Type scale">
+      <Block id="type" kicker="02 · Typography" title="Type scale">
         <div className="space-y-10">
           {TYPE.map((t) => (
             <div key={t.label} className="grid md:grid-cols-[180px_1fr] gap-4 md:gap-10 items-baseline">
@@ -94,7 +94,7 @@ export default function StyleGuide() {
       </Block>
 
       {/* Components */}
-      <Block id="components" kicker="03 — Components" title="Core elements">
+      <Block id="components" kicker="03 · Components" title="Core elements">
         <div className="grid md:grid-cols-2 gap-12">
           <div>
             <p className="text-fg-dim text-xs uppercase tracking-widest mb-5">Buttons</p>
@@ -127,7 +127,7 @@ export default function StyleGuide() {
       </Block>
 
       {/* Graphic language */}
-      <Block id="motif" kicker="04 — Graphic language" title="X-motif · grid · gradient">
+      <Block id="motif" kicker="04 · Graphic language" title="X-motif · grid · gradient">
         <div className="grid md:grid-cols-3 gap-4">
           <div className="card h-56 bg-electric relative overflow-hidden flex items-center justify-center">
             <XMotif />
@@ -143,7 +143,7 @@ export default function StyleGuide() {
       </Block>
 
       {/* Motion */}
-      <Block id="motion" kicker="05 — Motion" title="Easing tabs (Framer/GSAP)">
+      <Block id="motion" kicker="05 · Motion" title="Easing tabs (Framer/GSAP)">
         <div className="flex gap-2 mb-8">
           {['A', 'B', 'C'].map((t) => (
             <button key={t} onClick={() => setTab(t)}

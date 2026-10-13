@@ -1,74 +1,87 @@
-import { motion } from 'framer-motion'
-import { Reveal } from '../animations/Reveal'
-import { clientCategories } from '../../data/company'
+import { useRef } from 'react'
+import { gsap, useGSAP, MOTION_OK, DESKTOP } from '../../lib/gsap'
+import Img from '../ui/Img'
 
-const WORDS = 'A fully integrated event production and experience engineering company.'.split(' ')
+const STATEMENT =
+  'We design, build, brand and run the live events the Kingdom is judged by. Designers, engineers, fabricators and producers under one roof, from concept to dismantle.'
 
+/*
+ * Manifesto: one statement, lit word by word as you scroll (scrubbed), with a
+ * photo that drifts slower than the page beside it. On desktop the statement
+ * pins for one viewport so the read is paced by the scroll; on smaller screens
+ * it scrubs in place with no pin.
+ */
 export default function WhoWeAre() {
+  const section = useRef(null)
+  const pin = useRef(null)
+  const photo = useRef(null)
+  const words = STATEMENT.split(' ')
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia()
+      const light = (pinned) => {
+        const els = section.current.querySelectorAll('.m-word')
+        gsap.fromTo(
+          els,
+          { color: 'rgba(243,245,251,0.4)' },
+          {
+            color: 'rgba(243,245,251,1)',
+            stagger: 0.04,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: section.current,
+              start: pinned ? 'top top' : 'top 70%',
+              end: pinned ? '+=110%' : 'bottom 60%',
+              scrub: 0.4,
+              pin: pinned ? pin.current : false,
+              anticipatePin: 1,
+            },
+          },
+        )
+      }
+      mm.add(`${MOTION_OK} and ${DESKTOP}`, () => {
+        light(true)
+        gsap.fromTo(
+          photo.current,
+          { yPercent: 10 },
+          { yPercent: -10, ease: 'none', scrollTrigger: { trigger: section.current, start: 'top bottom', end: 'bottom top', scrub: true } },
+        )
+      })
+      mm.add(`${MOTION_OK} and (max-width: 1023px)`, () => light(false))
+      return () => mm.revert()
+    },
+    { scope: section },
+  )
+
   return (
-    <section id="about" className="relative bg-ink-900 py-section">
-      <div className="shell">
-        <Reveal>
-          <p className="eyebrow mb-8">Who we are</p>
-        </Reveal>
-
-        {/* Word-by-word statement reveal */}
-        <motion.h2
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ staggerChildren: 0.045 }}
-          className="font-display font-bold text-display-lg max-w-[20ch] text-balance"
-        >
-          {WORDS.map((w, i) => (
-            <span key={i} className="inline-block overflow-hidden align-top">
-              <motion.span
-                variants={{ hidden: { y: '110%' }, visible: { y: '0%' } }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="inline-block pr-[0.25em]"
-              >
-                {w}
-              </motion.span>
-            </span>
-          ))}
-        </motion.h2>
-
-        <div className="mt-16 grid lg:grid-cols-12 gap-x-gutter gap-y-12 items-start">
+    <section ref={section} id="about" className="relative bg-ink-900">
+      <div ref={pin} className="lg:h-[100svh] lg:flex lg:items-center py-section lg:py-0">
+        <div className="shell grid lg:grid-cols-12 gap-x-gutter gap-y-12 items-center w-full">
           <div className="lg:col-span-7">
-            <Reveal>
-              <div className="relative overflow-hidden rounded-md aspect-[16/10]">
-                <img
+            <p className="index mb-8">Who we are</p>
+            <h2 className="font-display font-bold font-semi-wide text-[clamp(1.75rem,3.4vw,3.6rem)] leading-[1.08] tracking-tight max-w-[26ch]">
+              {words.map((w, i) => (
+                <span key={i} className="m-word inline-block mr-[0.28em]">
+                  {w}
+                </span>
+              ))}
+            </h2>
+          </div>
+          <div className="lg:col-span-5">
+            <div className="relative overflow-hidden rounded-lg aspect-[4/5] lg:aspect-auto lg:h-[min(66vh,40rem)]">
+              <div ref={photo} className="absolute -inset-y-[12%] inset-x-0 gpu">
+                <Img
                   src="/images/sagp-lightbox-tunnel.jpg"
                   alt="Illuminated driver-portrait tunnel built by XLIVE at the Saudi Arabian Grand Prix"
-                  className="w-full h-full object-cover"
-                  loading="lazy"
+                  sizes="(min-width:1024px) 40vw, 100vw"
+                  className="h-full w-full object-cover"
                 />
-                <div className="absolute inset-0 ring-1 ring-inset ring-line rounded-md" />
               </div>
-            </Reveal>
-          </div>
-
-          <div className="lg:col-span-5 lg:pt-6">
-            <Reveal delay={0.1}>
-              <p className="text-body-lg font-body font-light text-fg-muted text-pretty">
-                XLIVE delivers turnkey solutions for world-class events, exhibitions, fit-out
-                projects, temporary structures and industrial production across the Middle East.
-                Our multidisciplinary team unites designers, engineers, fabricators and project
-                managers <span className="text-fg">under one roof</span> — ensuring seamless
-                coordination, fast execution and uncompromising quality on every project.
-              </p>
-            </Reveal>
-
-            <Reveal delay={0.2}>
-              <ul className="mt-10 space-y-3 border-t border-line-soft pt-8">
-                {clientCategories.map((c) => (
-                  <li key={c} className="flex items-center gap-3 font-body text-sm text-fg-muted">
-                    <span className="h-1 w-1 rounded-full bg-acid" />
-                    {c}
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
+              <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-ink-950/80 to-transparent" />
+              <div className="absolute inset-0 ring-1 ring-inset ring-line rounded-lg" />
+              <div className="absolute left-5 bottom-5 index text-fg-muted">Saudi Arabian Grand Prix · Jeddah</div>
+            </div>
           </div>
         </div>
       </div>

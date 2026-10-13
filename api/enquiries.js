@@ -1,5 +1,5 @@
 /*
- * GET /api/enquiries — minimal, token-protected debug/admin visibility.
+ * GET /api/enquiries: minimal, token-protected debug/admin visibility.
  *
  * Not a dashboard. Returns recent enquiries with their notification statuses so
  * a developer can confirm the pipeline without opening the database directly.

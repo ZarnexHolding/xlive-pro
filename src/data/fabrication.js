@@ -1,4 +1,4 @@
-// X Live Metal Fabrication — verbatim from the Business Profile (Fitout &
+// X Live Metal Fabrication: verbatim from the Business Profile (Fitout &
 // Industrial Metal Fabrication). The in-house differentiator: XLIVE builds
 // what it brands.
 
@@ -18,13 +18,13 @@ export const processes = [
     id: 'welding',
     title: 'Welding & Assembly',
     techniques: ['MIG, TIG, ARC & spot welding', 'Full structural assembly', 'On-site installation'],
-    note: 'Certified specialists — engineered for load-bearing strength and clean finishes.',
+    note: 'Certified specialists, engineered for load-bearing strength and clean finishes.',
   },
   {
     id: 'custom',
     title: 'Custom Fabrication',
     techniques: ['Architectural metal features', 'Custom-built event structures', 'Specialised furniture & industrial components'],
-    note: 'From concept to creation — bespoke, made-to-fit metal solutions.',
+    note: 'From concept to creation. Bespoke, made-to-fit metal solutions.',
   },
   {
     id: 'finishing',

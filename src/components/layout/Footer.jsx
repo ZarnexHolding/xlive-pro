@@ -12,7 +12,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-5">
             <img src={logo} alt="XLIVE Production" className="h-8 w-auto" />
-            <p className="mt-6 max-w-[34ch] font-display font-medium text-xl text-fg text-balance">
+            <p className="mt-6 max-w-[34ch] font-display font-semibold font-semi-wide text-xl text-fg text-balance">
               {company.tagline}
             </p>
             <p className="mt-4 max-w-[40ch] font-body text-sm text-fg-dim">
@@ -22,7 +22,7 @@ export default function Footer() {
 
           {/* Sitemap */}
           <nav className="md:col-span-3">
-            <p className="font-body text-label uppercase text-fg-dim mb-5">Explore</p>
+            <p className="index mb-5">Explore</p>
             <ul className="space-y-3">
               {nav.map((n) => (
                 <li key={n.label}>
@@ -42,7 +42,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div className="md:col-span-4">
-            <p className="font-body text-label uppercase text-fg-dim mb-5">Riyadh, KSA</p>
+            <p className="index mb-5">Riyadh, KSA</p>
             <address className="not-italic font-body text-sm text-fg-muted leading-relaxed">
               {company.parent}<br />
               {company.address.line1}<br />
@@ -65,7 +65,7 @@ export default function Footer() {
               © {year} {company.name} · Part of {company.parent} · CR {company.cr}
             </span>
           </div>
-          <span className="font-body text-xs text-fg-dim uppercase tracking-widest">The Future Is Live</span>
+          <span className="index">The Future Is Live</span>
         </div>
       </div>
     </footer>

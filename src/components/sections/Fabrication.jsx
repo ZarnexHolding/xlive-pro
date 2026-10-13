@@ -1,113 +1,106 @@
-import { motion } from 'framer-motion'
+import { useRef } from 'react'
+import { gsap, useGSAP, MOTION_OK } from '../../lib/gsap'
 import { Reveal } from '../animations/Reveal'
-import {
-  fabricationIntro,
-  materials,
-  processes,
-  fabricationSectors,
-} from '../../data/fabrication'
+import { materials, processes } from '../../data/fabrication'
+import Img from '../ui/Img'
 
+/*
+ * Fabrication: the photo is unveiled by a curtain (scaleX), and the four
+ * process steps light up in order as a progress rule draws down beside them
+ * (scrubbed). Materials sit as quiet chips under the headline.
+ */
 export default function Fabrication() {
+  const section = useRef(null)
+  const curtain = useRef(null)
+  const rule = useRef(null)
+  const steps = useRef(null)
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia()
+      mm.add(MOTION_OK, () => {
+        gsap.to(curtain.current, {
+          scaleX: 0,
+          duration: 1.4,
+          ease: 'power4.inOut',
+          scrollTrigger: { trigger: curtain.current, start: 'top 80%', once: true },
+        })
+        gsap.fromTo(
+          rule.current,
+          { scaleY: 0 },
+          { scaleY: 1, ease: 'none', scrollTrigger: { trigger: steps.current, start: 'top 70%', end: 'bottom 60%', scrub: 0.4 } },
+        )
+        gsap.utils.toArray(steps.current.querySelectorAll('[data-step]')).forEach((el) => {
+          gsap.fromTo(
+            el,
+            { autoAlpha: 0.25, x: 12 },
+            { autoAlpha: 1, x: 0, duration: 0.7, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 68%', toggleActions: 'play none none reverse' } },
+          )
+        })
+      })
+      return () => mm.revert()
+    },
+    { scope: section },
+  )
+
   return (
-    <section id="fabrication" className="relative bg-ink-950 py-section border-t border-line-soft overflow-hidden">
+    <section ref={section} id="fabrication" className="relative bg-ink-950 py-section border-t border-line-soft overflow-hidden">
       {/* blueprint grid ambience */}
       <div className="pointer-events-none absolute inset-0 bg-grid opacity-[0.15]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_85%_10%,rgba(42,26,174,0.18),transparent_60%)]" />
 
-      <div className="shell relative">
-        {/* Header */}
-        <div className="grid lg:grid-cols-12 gap-x-gutter gap-y-8 items-end mb-16">
-          <div className="lg:col-span-7">
-            <Reveal><p className="eyebrow mb-8">In-house fabrication</p></Reveal>
-            <Reveal delay={0.05}>
-              <h2 className="font-display font-bold text-display-lg text-balance">
-                We build what<br />we brand.
-              </h2>
-            </Reveal>
-          </div>
-          <div className="lg:col-span-5">
-            <Reveal delay={0.1}>
-              <p className="text-body-lg font-body font-light text-fg-muted text-pretty">{fabricationIntro}</p>
-            </Reveal>
-            <Reveal delay={0.15}>
-              <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs uppercase tracking-wider text-fg-dim">
-                {materials.map((m) => (
-                  <span key={m} className="flex items-center gap-2">
-                    <span className="h-1 w-1 bg-acid" />{m}
-                  </span>
-                ))}
-              </div>
-            </Reveal>
-          </div>
-        </div>
-
-        {/* Image + process spec sheet */}
-        <div className="grid lg:grid-cols-12 gap-x-gutter gap-y-10">
-          <div className="lg:col-span-5">
-            <Reveal>
-              <div className="lg:sticky lg:top-28 relative overflow-hidden rounded-md aspect-[4/5]">
-                <img
-                  src="/images/sagp-bridge.jpg"
-                  alt="Fabricated steel circuit structure delivered by X Live Metal Fabrication"
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 ring-1 ring-inset ring-line rounded-md" />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/60 to-transparent" />
-                <div className="absolute bottom-5 left-5 font-mono text-xs uppercase tracking-widest text-fg/80">
-                  Concept → Cut → Weld → Finish → Install
-                </div>
-              </div>
-            </Reveal>
-          </div>
-
-          <div className="lg:col-span-7">
-            <div className="border-t border-line-soft">
-              {processes.map((p, i) => (
-                <motion.div
-                  key={p.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.55, delay: i * 0.06, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  className="grid grid-cols-1 sm:grid-cols-12 gap-x-6 gap-y-3 py-7 border-b border-line-soft"
-                >
-                  <div className="sm:col-span-1 font-mono text-sm text-acid pt-1">{String(i + 1).padStart(2, '0')}</div>
-                  <div className="sm:col-span-4">
-                    <h3 className="font-display font-bold text-xl leading-tight">{p.title}</h3>
-                    <p className="mt-2 font-body text-xs text-fg-dim max-w-[28ch]">{p.note}</p>
-                  </div>
-                  <ul className="sm:col-span-7 font-mono text-[13px] text-fg-muted space-y-1.5">
-                    {p.techniques.map((t) => (
-                      <li key={t} className="flex gap-3">
-                        <span className="text-fg-dim">→</span>{t}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
+      <div className="shell relative grid lg:grid-cols-12 gap-x-gutter gap-y-12">
+        {/* Left: headline + photo */}
+        <div className="lg:col-span-6">
+          <Reveal>
+            <p className="index mb-5">X Live Metal Fabrication</p>
+            <h2 className="font-display font-bold font-semi-wide text-display-lg text-balance max-w-[12ch]">
+              We build what we brand.
+            </h2>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <p className="mt-6 max-w-[40ch] text-body-lg font-body font-light text-fg-muted text-pretty">
+              In-house metal fabrication, from cut to install.
+            </p>
+          </Reveal>
+          <Reveal delay={0.12}>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {materials.map((m) => (
+                <span key={m} className="font-mono text-xs uppercase tracking-[0.14em] text-fg-muted border border-line rounded-full px-3.5 py-1.5">
+                  {m}
+                </span>
               ))}
             </div>
+          </Reveal>
+
+          <div className="relative mt-10 overflow-hidden rounded-lg aspect-[16/10]">
+            <Img
+              src="/images/sagp-bridge.jpg"
+              alt="Fabricated steel circuit structure delivered by X Live Metal Fabrication"
+              sizes="(min-width:1024px) 50vw, 100vw"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-ink-950/60 to-transparent" />
+            <div className="absolute inset-0 ring-1 ring-inset ring-line rounded-lg" />
+            <div ref={curtain} className="absolute inset-0 bg-ink-950 origin-right gpu" />
           </div>
         </div>
 
-        {/* Sectors served */}
-        <div className="mt-16">
-          <Reveal>
-            <p className="font-mono text-xs uppercase tracking-widest text-fg-dim mb-6">Sectors we fabricate for</p>
-          </Reveal>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 border-t border-line-soft">
-            {fabricationSectors.map((s, i) => (
-              <motion.div
-                key={s.title}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.06 }}
-                className="py-6 lg:px-6 lg:first:pl-0 border-b border-line-soft lg:border-b-0 lg:border-r lg:last:border-r-0 border-line-soft"
-              >
-                <h4 className="font-display font-semibold text-base text-fg">{s.title}</h4>
-                <p className="mt-2 font-body text-sm text-fg-muted text-pretty">{s.detail}</p>
-              </motion.div>
+        {/* Right: process rail */}
+        <div className="lg:col-span-6 lg:pl-10 relative">
+          <div className="absolute left-0 top-2 bottom-2 hidden lg:block w-px bg-line-soft">
+            <div ref={rule} className="w-px h-full bg-acid origin-top" />
+          </div>
+          <div ref={steps} className="lg:pl-10 divide-y divide-line-soft">
+            {processes.map((p, i) => (
+              <div key={p.id} data-step className="py-8 first:pt-0 grid grid-cols-[3rem_1fr] gap-x-4">
+                <span className="font-mono text-sm text-acid pt-1">{String(i + 1).padStart(2, '0')}</span>
+                <div>
+                  <h3 className="font-display font-bold font-semi-wide text-2xl leading-tight">{p.title}</h3>
+                  <p className="mt-2 font-body text-sm text-fg-muted max-w-[40ch] text-pretty">{p.note}</p>
+                  <p className="mt-3 font-mono text-xs uppercase tracking-[0.14em] text-fg-dim">{p.techniques.join(' · ')}</p>
+                </div>
+              </div>
             ))}
           </div>
         </div>
