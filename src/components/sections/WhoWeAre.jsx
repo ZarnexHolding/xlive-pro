@@ -60,7 +60,7 @@ export default function WhoWeAre() {
         <div className="shell grid lg:grid-cols-12 gap-x-gutter gap-y-12 items-center w-full">
           <div className="lg:col-span-7">
             <p className="index mb-8">Who we are</p>
-            <h2 className="font-display font-bold font-semi-wide text-[clamp(1.75rem,3.4vw,3.6rem)] leading-[1.08] tracking-tight max-w-[26ch]">
+            <h2 className="font-display font-bold font-semi-wide text-[clamp(1.5rem,3.4vw,3.6rem)] leading-[1.1] tracking-tight max-w-[26ch]">
               {words.map((w, i) => (
                 <span key={i} className="m-word inline-block mr-[0.28em]">
                   {w}
@@ -69,7 +69,7 @@ export default function WhoWeAre() {
             </h2>
           </div>
           <div className="lg:col-span-5">
-            <div className="relative overflow-hidden rounded-lg aspect-[4/5] lg:aspect-auto lg:h-[min(66vh,40rem)]">
+            <div className="relative overflow-hidden rounded-lg aspect-[4/3] md:aspect-[16/9] lg:aspect-auto lg:h-[min(66vh,40rem)]">
               <div ref={photo} className="absolute -inset-y-[12%] inset-x-0 gpu">
                 <Img
                   src="/images/sagp-lightbox-tunnel.jpg"

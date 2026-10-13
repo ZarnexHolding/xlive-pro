@@ -18,6 +18,10 @@ const PHOTO = {
  * Six disciplines as a horizontal filmstrip. On desktop the section pins and
  * the strip scrolls sideways with the wheel (scrubbed); on tablet and phone it
  * is a normal vertical stack of the same cards. Nothing but transforms.
+ *
+ * Desktop layout is a flex column (header, then the strip filling what is
+ * left), so the cards shrink on short viewports instead of riding up over the
+ * headline the way an absolutely-positioned strip did.
  */
 export default function Capabilities() {
   const section = useRef(null)
@@ -63,8 +67,12 @@ export default function Capabilities() {
   )
 
   return (
-    <section ref={section} id="capabilities" className="relative bg-ink-950 border-t border-line-soft lg:h-[100svh] lg:overflow-hidden">
-      <div className="shell pt-section-sm lg:pt-[calc(var(--nav-h)+2.5rem)]">
+    <section
+      ref={section}
+      id="capabilities"
+      className="relative bg-ink-950 border-t border-line-soft lg:h-[100svh] lg:overflow-hidden lg:flex lg:flex-col"
+    >
+      <div className="shell pt-section-sm lg:pt-[calc(var(--nav-h)+2rem)] lg:shrink-0">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <Reveal>
             <p className="index mb-5">Capabilities</p>
@@ -86,17 +94,17 @@ export default function Capabilities() {
         </div>
       </div>
 
-      {/* Track: horizontal on desktop, vertical stack below */}
-      <div className="mt-12 lg:mt-14 pb-section-sm lg:pb-0 lg:absolute lg:inset-x-0 lg:bottom-[clamp(2rem,6vh,4rem)]">
+      {/* Track: horizontal on desktop (fills the remaining height), vertical stack below */}
+      <div className="mt-12 pb-section-sm lg:mt-0 lg:pb-[clamp(1.5rem,4vh,3rem)] lg:flex-1 lg:min-h-0 lg:flex lg:items-center">
         <div
           ref={track}
-          className="shell grid gap-4 md:grid-cols-2 lg:flex lg:w-max lg:max-w-none lg:gap-5 lg:pr-gutter gpu"
+          className="shell grid gap-4 md:grid-cols-2 lg:flex lg:w-max lg:max-w-none lg:h-full lg:items-center lg:gap-5 lg:py-6 lg:pr-gutter gpu"
         >
           {capabilities.map((cap, i) => (
             <article
               key={cap.id}
               data-cap
-              className="group relative overflow-hidden rounded-lg bg-ink-800 border border-line-soft lg:w-[min(38vw,34rem)] lg:h-[min(58vh,36rem)] aspect-[4/5] md:aspect-[4/3] lg:aspect-auto"
+              className="group relative overflow-hidden rounded-lg bg-ink-800 border border-line-soft aspect-[4/3] lg:aspect-auto lg:w-[min(38vw,34rem)] lg:h-[min(56vh,34rem)] lg:max-h-full"
             >
               <Img
                 src={PHOTO[cap.id]}

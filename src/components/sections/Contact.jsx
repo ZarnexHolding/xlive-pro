@@ -91,7 +91,8 @@ export default function Contact() {
         <div className="lg:col-span-5">
           <Reveal><p className="eyebrow mb-8">Start a project</p></Reveal>
           <Reveal delay={0.05}>
-            <h2 className="font-display font-black font-wide uppercase tracking-tightest text-display-lg text-balance">
+            {/* Semi-wide cut + fluid size so single words ("REMEMBERS.") fit the 5-col slot at every width */}
+            <h2 className="font-display font-black font-semi-wide uppercase tracking-tightest text-[clamp(2rem,3.4vw,3.75rem)] leading-[0.95] text-balance break-words">
               Let&rsquo;s build something the region remembers.
             </h2>
           </Reveal>
