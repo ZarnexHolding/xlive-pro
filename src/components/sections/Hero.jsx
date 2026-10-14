@@ -172,9 +172,9 @@ export default function Hero() {
           />
         </div>
 
-        {/* Copy: centered, anchored to the bottom of the viewport */}
-        <div className="relative z-10 h-full flex flex-col justify-end pt-24 md:pt-28">
-          <div ref={copy} className="shell pb-[clamp(3.5rem,8vh,6rem)] text-center">
+        {/* Copy: centered both ways (nav clearance on top, matching room below) */}
+        <div className="relative z-10 h-full flex flex-col justify-center pt-[calc(var(--nav-h)+1rem)] pb-[clamp(2rem,6vh,4rem)]">
+          <div ref={copy} className="shell text-center">
             <div data-hero-fade className="flex flex-col items-center">
               <p data-hero-eyebrow className="mb-6 eyebrow">
                 {company.descriptor}
