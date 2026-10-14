@@ -177,7 +177,7 @@ export default function Hero() {
             (spacers split the free height 1:2) and the CTAs anchor to the
             bottom (one row, lifted a little off the edge), so the footage reads
             through the middle of a tall screen. */}
-        <div className="relative z-10 h-full flex flex-col pt-[calc(var(--nav-h)+1rem)] pb-[clamp(2.5rem,8svh,4.5rem)] lg:justify-center lg:pb-[clamp(2rem,6vh,4rem)]">
+        <div className="relative z-10 h-full flex flex-col pt-[calc(var(--nav-h)+1rem)] pb-[clamp(4.5rem,16svh,7rem)] lg:justify-center lg:pb-[clamp(2rem,6vh,4rem)]">
           <div ref={copy} className="shell flex flex-1 flex-col text-center lg:flex-none">
             <div data-hero-fade className="flex flex-1 flex-col items-center lg:flex-none">
               <span aria-hidden="true" className="flex-[1] lg:hidden" />
