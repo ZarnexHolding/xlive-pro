@@ -175,8 +175,9 @@ export default function Hero() {
         {/* Copy. Desktop: one centred stack (nav clearance on top, matching room
             below). Below lg: the headline rides in the upper part of the frame
             (spacers split the free height 1:2) and the CTAs anchor to the
-            bottom, so the footage reads through the middle of a tall screen. */}
-        <div className="relative z-10 h-full flex flex-col pt-[calc(var(--nav-h)+1rem)] pb-[clamp(1.5rem,4svh,2.5rem)] lg:justify-center lg:pb-[clamp(2rem,6vh,4rem)]">
+            bottom (one row, lifted a little off the edge), so the footage reads
+            through the middle of a tall screen. */}
+        <div className="relative z-10 h-full flex flex-col pt-[calc(var(--nav-h)+1rem)] pb-[clamp(2.5rem,8svh,4.5rem)] lg:justify-center lg:pb-[clamp(2rem,6vh,4rem)]">
           <div ref={copy} className="shell flex flex-1 flex-col text-center lg:flex-none">
             <div data-hero-fade className="flex flex-1 flex-col items-center lg:flex-none">
               <span aria-hidden="true" className="flex-[1] lg:hidden" />
@@ -198,12 +199,12 @@ export default function Hero() {
 
               <span aria-hidden="true" className="flex-[2] min-h-8 lg:hidden" />
 
-              <div className="flex w-full max-w-sm flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-6 lg:mt-8">
-                <a ref={cta1} data-hero-cta href="#contact" onClick={go('#contact')} className="btn-primary px-8 py-4 text-[15px]">
+              <div className="flex w-full max-w-sm flex-wrap items-center justify-center gap-3 sm:w-auto sm:max-w-none sm:gap-6 lg:mt-8">
+                <a ref={cta1} data-hero-cta href="#contact" onClick={go('#contact')} className="btn-primary flex-1 whitespace-nowrap px-4 py-4 text-sm sm:flex-none sm:px-8 sm:text-[15px]">
                   Start a project
                   <span aria-hidden="true">→</span>
                 </a>
-                <a ref={cta2} data-hero-cta href="#work" onClick={go('#work')} className="btn-outline px-8 py-4 text-[15px] backdrop-blur-sm">
+                <a ref={cta2} data-hero-cta href="#work" onClick={go('#work')} className="btn-outline flex-1 whitespace-nowrap px-4 py-4 text-sm backdrop-blur-sm sm:flex-none sm:px-8 sm:text-[15px]">
                   See the work
                 </a>
               </div>
