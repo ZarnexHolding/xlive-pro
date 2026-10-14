@@ -172,11 +172,17 @@ export default function Hero() {
           />
         </div>
 
-        {/* Copy: centered both ways (nav clearance on top, matching room below) */}
-        <div className="relative z-10 h-full flex flex-col justify-center pt-[calc(var(--nav-h)+1rem)] pb-[clamp(2rem,6vh,4rem)]">
-          <div ref={copy} className="shell text-center">
-            <div data-hero-fade className="flex flex-col items-center">
-              <p data-hero-eyebrow className="mb-6 eyebrow">
+        {/* Copy. Desktop: one centred stack (nav clearance on top, matching room
+            below). Below lg: the headline rides in the upper part of the frame
+            (spacers split the free height 1:2) and the CTAs anchor to the
+            bottom, so the footage reads through the middle of a tall screen. */}
+        <div className="relative z-10 h-full flex flex-col pt-[calc(var(--nav-h)+1rem)] pb-[clamp(1.5rem,4svh,2.5rem)] lg:justify-center lg:pb-[clamp(2rem,6vh,4rem)]">
+          <div ref={copy} className="shell flex flex-1 flex-col text-center lg:flex-none">
+            <div data-hero-fade className="flex flex-1 flex-col items-center lg:flex-none">
+              <span aria-hidden="true" className="flex-[1] lg:hidden" />
+
+              {/* Tighter tracking on phones keeps the label on one line at 360px */}
+              <p data-hero-eyebrow className="mb-6 eyebrow max-sm:tracking-[0.12em]">
                 {company.descriptor}
                 <span className="hidden sm:inline text-fg-dim">/ Riyadh, Saudi Arabia</span>
               </p>
@@ -190,7 +196,9 @@ export default function Hero() {
                 most demanding live events.
               </p>
 
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+              <span aria-hidden="true" className="flex-[2] min-h-8 lg:hidden" />
+
+              <div className="flex w-full max-w-sm flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-6 lg:mt-8">
                 <a ref={cta1} data-hero-cta href="#contact" onClick={go('#contact')} className="btn-primary px-8 py-4 text-[15px]">
                   Start a project
                   <span aria-hidden="true">→</span>

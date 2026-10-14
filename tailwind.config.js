@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 /*
- * XLIVE design tokens — brand-true system.
+ * XLIVE design tokens: brand-true system.
  * Source of truth for Tailwind. The same values are mirrored as CSS custom
  * properties in src/styles/globals.css (:root) for use outside utility classes
  * (canvas, SVG, inline gradients). Keep the two in sync.
@@ -32,17 +32,17 @@ export default {
         },
         // Brand
         electric: {
-          DEFAULT: '#2A1AAE', // Deep Electric Blue — structural
-          bright: '#3A28E0',  // brighter — glows / gradients
+          DEFAULT: '#2A1AAE', // Deep Electric Blue: structural
+          bright: '#3A28E0',  // brighter: glows / gradients
           glow: '#5138FF',    // highlight / light-streak
           deep: '#160C6B',    // shadowed blue
         },
         acid: {
-          DEFAULT: '#73F83E', // Acid Green — the "live" accent (sparingly)
+          DEFAULT: '#73F83E', // Acid Green: the "live" accent (sparingly)
           dim: '#5AD62E',
         },
-        vivid: '#089A23',     // Vivid Green — supportive / success
-        olive: '#6E7B63',     // Muted Olive — organic muted
+        vivid: '#089A23',     // Vivid Green: supportive / success
+        olive: '#6E7B63',     // Muted Olive: organic muted
         // Text
         fg: {
           DEFAULT: '#F3F5FB', // primary text (cool near-white)
@@ -66,7 +66,10 @@ export default {
       },
       fontSize: {
         // Fluid editorial scale (clamp: min, preferred vw, max)
-        'display-2xl': ['clamp(2.5rem, 8vw, 8rem)', { lineHeight: '0.9', letterSpacing: '-0.035em' }],
+        // display-2xl (hero headline): the floor is 2.5rem, or less on phones
+        // narrower than ~404px, where (100vw - both gutters) / 9 keeps the
+        // widest headline line ("to perform.", ~8.7em wide) on one line.
+        'display-2xl': ['clamp(min(2.5rem, calc((100vw - 3rem) / 9)), 8vw, 8rem)', { lineHeight: '0.9', letterSpacing: '-0.035em' }],
         'display-xl': ['clamp(2.75rem, 7vw, 7rem)', { lineHeight: '0.93', letterSpacing: '-0.03em' }],
         'display-lg': ['clamp(2.25rem, 5vw, 4.75rem)', { lineHeight: '0.98', letterSpacing: '-0.025em' }],
         'heading': ['clamp(1.75rem, 3vw, 3rem)', { lineHeight: '1.05', letterSpacing: '-0.02em' }],
